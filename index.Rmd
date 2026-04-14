@@ -1,0 +1,35 @@
+--- 
+title: "Transferfuncties voor het SoilHarmony project"
+author: "Ben Serrien"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  Dit is mijn eerste ervaring met bookdown.
+link-citations: yes
+github-repo: benserrien/transferfunctions
+---
+
+# Welkom
+
+Dit is mijn eerste ervaring met bookdown. Deze bookdown dient als kleine samenvatting van mijn literatuurstudie rond "regression dilution" in het kader van het SoilHarmony project waarop ik begin te werken bij INBO.
+
+```{r packages, echo=F, message=F, warning=F}
+# packages inladen
+library(tidyverse)
+library(sf)
+conflicted::conflict_prefer("filter","dplyr")
+conflicted::conflict_prefer("lag","dplyr")
+```
+
+
+
+```{r echo=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
