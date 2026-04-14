@@ -1,0 +1,111 @@
+# Notatie en data {#notatie}
+
+## Notatie
+
+Hieronder introduceren we enkele notaties die we verderop gebruiken.
+
+We noteren $Y$ als de meting van de bodemvariabele met de referentiemethode en $X$ als de meting met de niet-referentiemethode. We willen een **transferfunctie** $\hat{Y} = f(X)$ ontwikkelen om obv de niet-referentiemethode de waarde van de referentiemethode te voorspellen in een nieuwe dataset (met 95% CI of 95% CrI $[\hat{Y}_{LL}; \hat{Y}_{UL}]$). We weten echter dat ook de niet-referentiemethode meetfouten heeft ($U$). We observeren dus niet rechtstreeks $X$ maar wel $W = X + U$. Om met de meetfouten in de predictor rekening te houden, moeten we naast een hoofdstudie waarin we $Y$ en $W$ meten in alle steekproefeenheden ($N$) ook een substudie doen met een aselect deel van de steekproefeenheden. Deze substudie kan ofwel bestaan uit herhaalde metingen van $W$ (replicatie-substudie) ofwel uit een meting van de echte $X$ (validatie-substudie).
+
+## Data
+
+Om enkele methoden te vergelijken maken we gebruik van een publiek beschikbare dataset over bodem-metingen. De dataset is van WOSIS en gaat over metingen van bodem pH en is beschreven in volgend artikel: https://bsssjournals.onlinelibrary.wiley.com/doi/full/10.1111/ejss.70021
+De dataset kan hier gedownload worden: https://figshare.com/s/2ab390e6734ef87d4ebb
+
+De dataset bevat metingen van de pH op basis van twee methoden: pHH20 en pHCa. Voor deze oefening nemen we enkel de locaties waar de pH met beide methoden werd gemeten. Puur als statistische oefening nemen we hier $Y$ = pHH2O (referentiemethode) en $X$ = pHCa (niet-referentiemethode). Figuur @ref(map-pHH2O) geeft de locaties weer waarvoor data beschikbaar zijn met beide methoden (enkel visualisatie van pHH2O).
+
+```{r data_import, message = F, echo = T}
+data_wosis <- read_csv(
+  "data/merged_wosis_data_with_precipitation_and_ET.csv"
+)
+
+# filter dataset
+data_wosis_pH <- data_wosis %>%
+  filter(
+    !is.na(pHH2O),
+    !is.na(pHCa)
+  ) %>%
+  st_as_sf(coords = c("longitude","latitude"), crs = st_crs("WGS84")) %>%
+  select(layer_id, country_name, pHH2O, pHCa, geometry)
+```
+
+```{r map-pHH2O, fig.cap="Map met WoSIS pHH2O metingen", out.width="100%", fig.asp=.75, fig.align="center", echo = F}
+
+# countries of the world
+ne <- rnaturalearth::ne_countries(returnclass = "sf") %>%
+  select(name, geometry)
+
+# map of pHH2O
+ggplot() +
+  geom_sf(data = ne) +
+  geom_sf(data = data_wosis_pH, size = .5, aes(color = pHH2O))
+```
+
+
+```{r, echo=T}
+N    <- nrow(data_wosis_pH)
+tau2 <- .3
+data_wosis_pH <- data_wosis_pH %>%
+  mutate(
+    pHCa_obs = pHCa + rnorm(N, 0, sqrt(tau2))
+  )
+```
+
+We veronderstellen dat de metingen met pHCa ($X$) uit de dataset zonder meetfouten zijn gebeurd en we voegen zelf een meetfout toe om de regressie-dilutie te simuleren:
+$$W = X + U$$
+met $u_i \sim N(0, \tau^2)$ en $\tau^2 =$ `r sprintf("%.1f", tau2)`. Figuur @ref(wosis-scatter) geeft de relatie weer tussen $Y$ en $X$ en tussen $Y$ en $W$. 
+
+```{r wosis-scatter, fig.cap="Scatterplot van pH metingen (H2O vs. Ca). De kleur geeft aan of de meting van de predictor met of zonder meetfout gebeurde.", out.width="100%", fig.asp=.75, fig.align="center", echo = F, message = F}
+
+# scatter-plot regressie-dilutie
+data_wosis_pH %>%
+  st_drop_geometry() %>%
+  pivot_longer(contains("pHCa"), names_to = "X", values_to = "pHCa") %>%
+  mutate(X = factor(X, c("pHCa", "pHCa_obs"), c("X","W"))) %>%
+  ggplot(aes(pHCa, pHH2O, color = X)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm") +
+  labs(color = "pHCa (X of W)")
+```
+
+Het is duidelijk dat door de toevoeging van een meetfout op $X$ de relatie zwakker wordt (kleinere slope):
+
+```{r slopes, echo = F}
+(lm(pHH2O ~ pHCa, data = data_wosis_pH))
+(lm(pHH2O ~ pHCa_obs, data = data_wosis_pH))
+```
+
+
+### Training- en test data
+
+Om de methoden voor transfer-functies te evalueren, splitsen we de dataset op in een training-dataset en een test-dataset (50/50).
+
+```{r train-test, echo = T}
+ptrain <- .5
+
+data_train <- data_wosis_pH %>%
+  slice_sample(prop = ptrain)
+
+data_test <- data_wosis_pH %>%
+  filter(!(layer_id %in% data_train$layer_id))
+```
+
+### Substudie
+
+In de training-dataset voeren we een substudie uit op 10% van de steekproefeenheden. We doen zowel een substudie waarin we $X$ zonder meetfout observeren `pHCa_sub` als een substudie met 3 herhaalde metingen van $W$ `pHCa_obs, pHCa_obs2, pHCa_obs3`.
+
+```{r substudy, echo = T}
+Ntrain <- nrow(data_train)
+p      <- .1
+idx_sub <- sample(data_train$layer_id, p * Ntrain, replace = F)
+data_train <- data_train %>%
+  mutate(
+    substudy = ifelse(layer_id %in% idx_sub, 1, NA_real_),
+    pHCa_sub = ifelse(layer_id %in% idx_sub, pHCa, NA_real_),
+    pHCa_obs2 = ifelse(layer_id %in% idx_sub, 
+                       pHCa + rnorm(n(), 0, sqrt(tau2)), NA_real_),
+    pHCa_obs3 = ifelse(layer_id %in% idx_sub, 
+                       pHCa + rnorm(n(), 0, sqrt(tau2)), NA_real_)
+  )
+rm(idx_sub, p, Ntrain)
+```
+
