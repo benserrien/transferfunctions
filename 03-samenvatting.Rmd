@@ -1,0 +1,11 @@
+# Samenvatting verschillende methoden
+
+Hieronder staat een klein overzicht van de verschillende methoden die verderop aan bod komen.
+
+| Methode | Geschikt als transferfunctie? | Houdt rekening met regressie-dilutie? | Voordeel | Nadeel |
+|---------------|---------------|---------------|---------------|---------------|
+|  |  |  |  |  |
+|  |  | x |  |  |
+|  |  |  |  |  |
+
+: Samenvatting methoden
