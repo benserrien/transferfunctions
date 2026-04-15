@@ -117,3 +117,15 @@ data_train <- data_train %>%
 rm(idx_sub, p, Ntrain)
 ```
 
+### Covariaat
+
+Tot slot visualiseren we ook nog de relatie tussen de pH en de covariaat (bulk densititeit). Figuur \@ref(fig:covariate) toont de relatie tussen beide tesamen met een scatterplot-smoother en een lineaire fit. De relatie lijkt voldoende lineair in eerste orde.
+
+```{r covariate, echo=F, warning=F, message=F}
+data_wosis_pH %>%
+  ggplot(aes(bulk_dens, pHH2O)) +
+  geom_point() +
+  geom_smooth() +
+  geom_smooth(method = "lm", color = "red")
+```
+
