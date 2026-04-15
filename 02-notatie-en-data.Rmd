@@ -12,9 +12,9 @@ De hoofd- en substudies zullen in het algemeen ook extra variabelen bevatten die
 Om enkele methoden te vergelijken maken we gebruik van een publiek beschikbare dataset over bodem-metingen. De dataset is van WOSIS en gaat over metingen van bodem pH en is beschreven in volgend artikel: https://bsssjournals.onlinelibrary.wiley.com/doi/full/10.1111/ejss.70021
 De dataset kan hier gedownload worden: https://figshare.com/s/2ab390e6734ef87d4ebb
 
-De dataset bevat metingen van de pH op basis van twee methoden: `pHH20` en `pHCa.` Voor deze oefening nemen we enkel de locaties waar de pH met beide methoden werd gemeten. Puur als statistische oefening nemen we hier $Y$ = `pHH2O` (referentiemethode) en $X$ = `pHCa` (niet-referentiemethode). Figuur \@ref(fig:map-pHH2O) geeft de locaties weer waarvoor data beschikbaar zijn met beide methoden (enkel visualisatie van `pHH2O`).
+De dataset bevat metingen van de pH op basis van twee methoden: `pHH20` en `pHCa.` Voor deze oefening nemen we enkel de locaties waar de pH met beide methoden werd gemeten. Dit bookdown is niet bedoeld als oefening voor een volwaardige bodemstudie, maar als statistische oefening; ik ken nog te weinig van bodemmetingen om een correcte inschatting te maken welke pre-processing nodig is op zulk een dataset. Puur als statistische oefening nemen we hier $Y$ = `pHH2O` (referentiemethode) en $X$ = `pHCa` (niet-referentiemethode). Figuur \@ref(fig:map-pHH2O) geeft de locaties weer waarvoor data beschikbaar zijn met beide methoden (enkel visualisatie van `pHH2O`). Als covariaat $Z$ nemen we de  densiteit van de bodem (`bulk_dens`) en we nemen enkel die locaties waar deze ook werd gemeten.
 
-```{r data-import, message = F, echo = F}
+```{r data-import, message = F, echo = T}
 data_wosis <- read_csv(
   "data/merged_wosis_data_with_precipitation_and_ET.csv"
 )
@@ -23,14 +23,15 @@ data_wosis <- read_csv(
 data_wosis_pH <- data_wosis %>%
   filter(
     !is.na(pHH2O),
-    !is.na(pHCa)
+    !is.na(pHCa),
+    !is.na(`Bulk density`)
   ) %>%
+  rename(bulk_dens = `Bulk density`) %>%
   st_as_sf(coords = c("longitude","latitude"), crs = st_crs("WGS84")) %>%
-  select(layer_id, country_name, pHH2O, pHCa, 
-         upper_depth, lower_depth, geometry)
+  select(layer_id, country_name, pHH2O, pHCa, bulk_dens, geometry)
 ```
 
-```{r map-pHH2O, fig.cap="Map met WoSIS pHH2O metingen", out.width="100%", fig.asp=.75, fig.align="center", echo = F}
+```{r map-pHH2O, fig.cap="Map met WoSIS pHH2O metingen (geselecteerde locaties)", out.width="100%", fig.asp=.75, fig.align="center", echo = F}
 
 # countries of the world
 ne <- rnaturalearth::ne_countries(returnclass = "sf") %>%
