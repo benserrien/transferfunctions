@@ -17,7 +17,7 @@ github-repo: benserrien/transferfunctions
 
 Dit is mijn eerste ervaring met bookdown. Deze bookdown dient als kleine samenvatting van mijn literatuurstudie rond "regression dilution" in het kader van het SoilHarmony project waarop ik begin te werken bij INBO.
 
-```{r packages, echo=F, message=F, warning=F}
+```{r packages, echo=T, message=F, warning=F}
 # packages inladen
 library(tidyverse)
 library(sf)
