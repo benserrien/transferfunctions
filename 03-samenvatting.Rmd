@@ -1,11 +1,13 @@
 # Samenvatting verschillende methoden
 
-Hieronder staat een klein overzicht van de verschillende methoden die verderop aan bod komen.
+Hieronder staat een klein overzicht van de verschillende methoden die verderop aan bod komen. Meer details staan in de specifieke hoofdstukken.
 
-| Methode | Geschikt als transferfunctie? | Houdt rekening met regressie-dilutie? | Voordeel | Nadeel |
-|---------------|---------------|---------------|---------------|---------------|
-|  |  |  |  |  |
-|  |  | x |  |  |
-|  |  |  |  |  |
+## Lineaire regressie
 
-: Samenvatting methoden
+-   Transferfunctie (predicties): ja.
+
+-   Schatten van functionele relatie met correctie voor regressie dilutie: nee.
+
+-   Covariaten mogelijk: ja.
+
+## Bland-Altman analyse
