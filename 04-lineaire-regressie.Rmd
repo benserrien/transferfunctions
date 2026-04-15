@@ -1,0 +1,88 @@
+# Lineaire regressie
+
+We negeren de aanwezigheid van de meetfouten in $X$ en gaan uit van de predictie obv $W$. Hiervoor is geen substudie nodig. Voor predicties te maken is lineaire regressie voldoende, het nadeel is dat de functionele relatie niet correct wordt ingeschat, maar voor predicties is de proxy relatie voldoende. Het voordeel van lineaire regressie is dat additionele covariaten ook in rekening kunnen worden gebracht: dit kan de bias en variantie van de predicties verkleinen. Om gebruikt te worden in een transferfunctie, moeten we er zeker van zijn, dat de covariaat wel steeds ter beschikking is en dat deze zonder meetfout wordt gemeten.
+
+## Zonder covariaten
+
+We modelleren een lineaire relatie tussen $Y$ en $W$ in de training-dataset:
+
+$$Y_i \sim N(\beta_0 + \beta_WW_i, \sigma^2)$$
+
+```{r linear1, echo = T}
+# lineair model zonder covariaten
+m1 <- lm(pHH2O ~ pHCa_obs, data = data_train)
+summary(m1)
+```
+
+We maken nu een transferfunctie obv het gefitte model en passen dit toe op de test-dataset. We berekenen de coverage (% van de observaties in de test-dataset waarvoor het predictie-interval de echte waarde van pHH2O bevat) en de root-mean-square-error: 
+$$RMSE = \sqrt{n^{-1}\sum_i{(y_i - \hat{y}_i)^2}}$$
+
+```{r, echo = T}
+# transferfunctie
+tf1 <- function(m, newdat) {
+  yhat <- predict(m, newdata = newdat, 
+                  interval = "prediction", level = .95)
+  return(yhat)
+}
+
+# pas de transfer-functie toe op de test-dataset
+yhats      <- tf1(m1, data_test)
+data_test1 <- cbind(data_test, yhats)
+```
+
+```{r, echo = F}
+# plot predicties (met interval) & coverage en RMSE van de transferfunctie
+evaluatie_tf <- function(data_testx) {
+  summary <- data_testx %>%
+    summarise(
+      coverage = mean(between(pHH2O, lwr, upr)),
+      RMSE = sqrt(mean((pHH2O - fit)^2))
+    )
+  data_testx %>%
+    ggplot(aes(pHCa_obs, pHH2O)) +
+    geom_point(color = "red") +
+    geom_pointrange(aes(pHCa_obs, fit, ymin = lwr, ymax = upr), 
+                    color = "blue", alpha = .1) +
+    labs(x = "Meting met niet-referentiemethode (W)", 
+         y = "Y (rood) &\nYhat [95% CI] (blauw)") +
+    annotate("text",
+             x = quantile(data_testx$pHCa_obs, .01),
+             y = quantile(data_testx$pHH2O, .99),
+             label = paste0("coverage = ",
+                            sprintf("%.2f",summary$coverage))) +
+     annotate("text",
+              x = quantile(data_testx$pHCa_obs, .01),
+              y = quantile(data_testx$pHH2O, .97),
+              label = paste0("RMSE = ",
+                             sprintf("%.3f",summary$RMSE)))
+}
+evaluatie_tf(data_test1)
+```
+
+## Met covariaten
+
+We voegen nu een covariaat toe aan het model:
+
+$$Y_i \sim N(\beta_0 + \beta_WW_i + \beta_ZZ_i, \sigma^2)$$
+
+```{r linear2, echo = T}
+# lineair model met covariaat
+m2 <- lm(pHH2O ~ pHCa_obs + bulk_dens, data = data_train)
+summary(m2)
+```
+
+De coverage blijft hetzelfde en de RMSE is een beetje kleiner geworden:
+
+```{r, echo = F}
+tf2 <- function(m, newdat) {
+  yhat <- predict(m, newdata = newdat, 
+                  interval = "prediction", level = .95)
+  return(yhat)
+}
+
+yhats      <- tf2(m2, data_test)
+data_test2 <- cbind(data_test, yhats)
+
+evaluatie_tf(data_test2)
+```
+
