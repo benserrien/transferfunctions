@@ -1,0 +1,27 @@
+# Bland-Altman analyse
+
+Bland-Altman (BA) analyse is een veelgebruikte techniek voor het vergelijken van twee methoden. Een BA-analyse geeft het verschil tussen twee gepaarde metingen weer in functie van het gemiddelde van beide metingen. De uitkomst van de analyse is de bias (gemiddelde van het verschil tussen beide methoden) en de limits-of-agreement (LoA; 95% CI voor het verschil tussen beide methoden). Dit kan niet gebruikt worden voor transferfuncties (BA is geen model), maar kan puur descriptief wel interessant zijn. We gebruiken het R package `coat` voor de analyse (conditional method agreement trees).
+
+## Zonder covariaten
+
+We doen eerst een analyse zonder covariaten. De bias wordt geschat op 0.51 pH eenheden (pHH2O > pHCa) en de LoA geeft aan dat men kan verwachten dat de `pHH2O` ergens zal liggen tussen `pHCa - 1.09` en `pHCa + 0.07`.
+
+```{r BA1, echo=T, message=F}
+library(coat)
+
+# BA-analyse zonder covariaten (volledige dataset)
+ba1 <- coat(pHCa + pHH2O ~ 1, data = data_wosis_pH)
+plot(ba1)
+```
+
+## Met covariaten
+
+Het `coat` package laat ook toe om de bias en LoA in te schatten naargelang discrete en continue covariaten. Omwille van de grote sample size vindt het algoritme veel significante splits in de trees. Nadere inspectie van de bias en LoA in de verschillende splits, lijken dit weinig wetenschappelijk relevante verschillen. We verhogen daarom het minimum aantal observaties in een subgroep om een duidelijke figuur te maken. De analyse geeft aan dat de bias en LoA significant verschillen tussen bodems met bulk densiteit groter of kleiner dan 1.467 (dit verschil lijkt niet echt wetenschappelijk relevant aangezien de pH metingen slechts met 1 cijfer na de komma zijn gemeten).
+
+```{r BA2, echo=T, message=F}
+# BA-analyse met covariaten (volledige dataset)
+ba2 <- coat(pHCa + pHH2O ~ bulk_dens,
+            type = "ctree", minsize = 2e4,
+            data = data_wosis_pH)
+plot(ba2)
+```
