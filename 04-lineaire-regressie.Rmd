@@ -30,7 +30,7 @@ yhats      <- tf1(m1, data_test)
 data_test1 <- cbind(data_test, yhats)
 ```
 
-```{r, echo = F}
+```{r eval_linreg1, echo = F}
 # plot predicties (met interval) & coverage en RMSE van de transferfunctie
 evaluatie_tf <- function(data_testx) {
   summary <- data_testx %>%
@@ -73,7 +73,7 @@ summary(m2)
 
 De coverage blijft hetzelfde en de RMSE is een beetje kleiner geworden:
 
-```{r, echo = F}
+```{r eval_linreg2, echo = F}
 tf2 <- function(m, newdat) {
   yhat <- predict(m, newdata = newdat, 
                   interval = "prediction", level = .95)
