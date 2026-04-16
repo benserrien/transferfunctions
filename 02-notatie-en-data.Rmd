@@ -4,7 +4,7 @@
 
 Hieronder introduceren we enkele notaties die we verderop gebruiken.
 
-We noteren $Y$ als de meting van de bodemvariabele met de referentiemethode en $X$ als de meting met de niet-referentiemethode. We willen een **transferfunctie** $\hat{Y} = f(X)$ ontwikkelen om obv de niet-referentiemethode de waarde van de referentiemethode te voorspellen in een nieuwe dataset (met 95% CI of 95% CrI $[\hat{Y}_{LL}; \hat{Y}_{UL}]$). We weten echter dat ook de niet-referentiemethode meetfouten heeft ($U$). We observeren dus niet rechtstreeks $X$ maar wel $W = X + U$. In de praktijk zullen we dus een transferfunctie van de vorm $\hat{Y} = f(W)$ construeren omdat $X$ (meestal) niet is waargenomen. De functie $Y = f(X)$ wordt in de literatuur vaak als de *functionele relatie* tussen $Y$ en $X$ bestempeld, terwijl de functie $Y = f(W)$ als de *proxy relatie* tussen $Y$ en $X$. Om met de meetfouten in de predictor rekening te houden, moeten we naast een hoofdstudie waarin we $Y$ en $W$ meten in alle steekproefeenheden ($N$) ook een substudie doen met een aselect deel van de steekproefeenheden. Deze substudie kan ofwel bestaan uit herhaalde metingen van $W$ (replicatie-substudie) ofwel uit een meting van de echte $X$ (validatie-substudie). 
+We noteren $Y$ als de meting van de bodemvariabele met de referentiemethode en $X$ als de meting met de niet-referentiemethode. We willen een **transferfunctie** $\hat{Y} = f(X)$ ontwikkelen om obv de niet-referentiemethode de waarde van de referentiemethode te voorspellen in een nieuwe dataset (met 95% CI of 95% CrI $[\hat{Y}_{LL}; \hat{Y}_{UL}]$). We weten echter dat ook de niet-referentiemethode meetfouten heeft ($U$). We observeren dus niet rechtstreeks $X$ maar wel $W = X + U$. In de praktijk zullen we dus een transferfunctie van de vorm $\hat{Y} = f(W)$ construeren omdat $X$ (meestal) niet is waargenomen. De functie $Y = f(X)$ wordt in de literatuur vaak als de *functionele relatie* tussen $Y$ en $X$ bestempeld, terwijl de functie $Y = f(W)$ als de *proxy relatie* tussen $Y$ en $X$ wordt omschreven. Om met de meetfouten in de predictor rekening te houden, moeten we naast een hoofdstudie waarin we $Y$ en $W$ meten in alle steekproefeenheden ($N$) ook een substudie doen met een aselect deel van de steekproefeenheden. Deze substudie kan ofwel bestaan uit herhaalde metingen van $W$ (replicatie-substudie) ofwel uit een meting van de echte $X$ (validatie-substudie). 
 De hoofd- en substudies zullen in het algemeen ook extra variabelen bevatten die werden gemeten. We noteren $Z$ als de extra covariaten die beschikbaar zijn (en veronderstellen dat deze zonder meetfout werden geobserveerd). Deze covariaten kunnen eventueel gebruikt worden om de bias en onzekerheid op de schattingen te verkleinen.
 
 ## Data
@@ -54,6 +54,7 @@ $$W = X + U$$
 met $u_i \sim N(0, \tau^2)$ en $\tau^2 =$ `r sprintf("%.1f", tau2)` (de meetfouten worden verondersteld onafhankelijk te zijn van $Y$ en $X$). 
 
 ```{r, echo = T}
+set.seed(123)
 data_wosis_pH <- data_wosis_pH %>%
   mutate(
     pHCa_obs = pHCa + rnorm(N, 0, sqrt(tau2))
@@ -90,6 +91,7 @@ Om de methoden voor transfer-functies te evalueren, splitsen we de dataset op in
 ```{r train-test, echo = T}
 ptrain <- .5
 
+set.seed(123)
 data_train <- data_wosis_pH %>%
   slice_sample(prop = ptrain)
 
@@ -99,12 +101,13 @@ data_test <- data_wosis_pH %>%
 
 ### Substudie
 
-In de training-dataset voeren we een substudie uit op 10% van de steekproefeenheden. We doen zowel een substudie waarin we $X$ zonder meetfout observeren `pHCa_sub` als een substudie met 3 herhaalde metingen van $W$ `pHCa_obs, pHCa_obs2, pHCa_obs3`.
+In de training-dataset voeren we een substudie uit op 10% van de steekproefeenheden. We doen zowel een substudie waarin we $X$ zonder meetfout observeren (`pHCa_sub`) als een substudie met 3 herhaalde metingen van $W$ (`pHCa_obs, pHCa_obs2, pHCa_obs3`). Figuur \@ref(fig:substudy-fig) toont de data van enkele locaties uit de substudie.
 
 ```{r substudy, echo = T}
-Ntrain <- nrow(data_train)
-p      <- .1
-idx_sub <- sample(data_train$layer_id, p * Ntrain, replace = F)
+Ntrain  <- nrow(data_train)
+psub    <- .1
+idx_sub <- sample(data_train$layer_id, psub * Ntrain, replace = F)
+set.seed(123)
 data_train <- data_train %>%
   mutate(
     substudy = ifelse(layer_id %in% idx_sub, 1, NA_real_),
@@ -114,8 +117,24 @@ data_train <- data_train %>%
     pHCa_obs3 = ifelse(layer_id %in% idx_sub, 
                        pHCa + rnorm(n(), 0, sqrt(tau2)), NA_real_)
   )
-rm(idx_sub, p, Ntrain)
+rm(idx_sub, psub, Ntrain)
 ```
+
+```{r substudy-fig, echo=F, fig.cap = "Data uit de substudie (slechts 20 locaties worden getoond om de figuur leesbaar te houden). De validatie-substudie registreert de waarde van pHCa zonder meetfout (rode punten). De rode foutenbalk is +/- 1SD van de meetfout (tau) en is in de praktijk niet gekend. De replicatie-substudie registreert 3 herhaalde metingen van de pHCa met meetfout (zwarte punten)."}
+
+data_train %>%
+  filter(substudy == 1) %>%
+  slice_sample(n = 20) %>%
+  select(pHH2O, pHCa_sub, pHCa_obs, pHCa_obs2, pHCa_obs3) %>%
+  pivot_longer(c(pHCa_obs, pHCa_obs2, pHCa_obs3),
+               names_to = "replicates", values_to = "pHCa_obs") %>%
+  ggplot(aes(y = pHH2O)) +
+  geom_pointrange(aes(x=pHCa_sub, xmin=pHCa_sub-sqrt(tau2), 
+                      xmax=pHCa_sub+sqrt(tau2)), color = "red") +
+  geom_point(aes(x = pHCa_obs)) +
+  labs(x = "pHCa", y = "pHH2O")
+```
+
 
 ### Covariaat
 
@@ -127,5 +146,11 @@ data_wosis_pH %>%
   geom_point() +
   geom_smooth() +
   geom_smooth(method = "lm", color = "red")
+```
+
+```{r, echo = F}
+# save datasets for use in other markdowns
+save(data_wosis, data_wosis_pH, data_train, data_test, tau2,
+     file = "data/data-wosis.rda")
 ```
 

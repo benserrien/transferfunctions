@@ -1,0 +1,69 @@
+# Method Comparison Regression
+
+```{r, echo=F}
+load("data/data-wosis.rda")
+```
+
+Het R packge `mcr` kan gebruikt worden om twee meet-methoden te vergelijken met regressie-analyse. De regressie methoden in dit package houden rekening met meetfouten in de predictor en zijn dus geschikt om de functionele relatie tussen $Y$ en $X$ te schatten. De methoden uit dit package hebben geen substudie nodig (geen herhaalde metingen van de predictor). Covariaten kunnen niet in rekening gebracht worden. Predicties voor het gebruik in transferfuncties zijn niet mogelijk.
+
+```{r, echo=T}
+library(mcr)
+
+# ter vergelijking met de mcr-methoden printen we nog eens de relatie 
+# Y vs. X:
+(lm(pHH2O ~ pHCa, data = data_wosis_pH))
+# Y vs. W:
+(lm(pHH2O ~ pHCa_obs, data = data_wosis_pH))
+```
+
+## Deming regressie (total least-squares)
+
+Deming regressie gebruikt het criterium van total least-squares om een regressie-lijn te fitten (som van de error in de x- en y-richting tov de fit) en meestal wordt er een gelijk gewicht gegeven aan de x- en y-variabele (`error.ratio = 1`). Dit is equivalent aan een principal-component analyse. Uit de analyse blijkt dat de slope ($\hat{\beta}_X$) al dichter licht bij de echte waarde dan zonder rekening te houden met de meetfout op $X$, maar dat het 95%CI de echte waarde nog niet omvat.
+
+```{r deming, echo = T}
+mcr1 <- mcreg(data_train$pHCa_obs, data_train$pHH2O, 
+              method.reg = "Deming", error.ratio = 1,
+              method.ci = "analytical")
+summary(mcr1)
+```
+
+Predicties maken met `mcr` modellen blijkt niet mogelijk:
+
+```{r, echo = T}
+predict(mcr1, newdata = data_test)
+```
+
+## Theil-Sen regressie
+
+Theil-Sen regressie is een robuuste versie van lineaire regressie. De meetfouten in de predictor worden hier niet in rekening genomen, waardoor de slope coefficiënt niet veel verschilt van de naïeve schatting hierboven.
+
+```{r theil-sen, echo = T}
+mcr2 <- mcreg(data_train$pHCa_obs, data_train$pHH2O, 
+              method.reg = "TS", 
+              method.ci = "analytical")
+summary(mcr2)
+```
+
+## Passing-Bablok regressie
+
+Passing-Bablok regressie is robuust en houdt rekening met meetfouten in de predictor. Passing-Bablok regressie is een robuuste niet-parametrische methode gebaseerd op de paarsgewijze slopes tussen twee observaties.
+
+```{r pb1, echo = T}
+mcr3 <- mcreg(data_train$pHCa_obs, data_train$pHH2O, 
+              method.reg = "PaBaLarge", 
+              method.ci = "analytical")
+summary(mcr3)
+```
+
+## Equivariante Passing-Bablok regressie
+
+Equivariante Passing-Bablok regressie is robuust en houdt rekening met meetfouten in de predictor.
+
+```{r pb2, echo = T}
+mcr4 <- mcreg(data_train$pHCa_obs, data_train$pHH2O, 
+              method.reg = "PBequi", 
+              method.ci = "analytical")
+summary(mcr4)
+```
+
+

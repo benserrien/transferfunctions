@@ -1,5 +1,9 @@
 # Lineaire regressie
 
+```{r, echo=F}
+load("data/data-wosis.rda")
+```
+
 We negeren de aanwezigheid van de meetfouten in $X$ en gaan uit van de predictie obv $W$. Hiervoor is geen substudie nodig. Voor predicties te maken is lineaire regressie voldoende, het nadeel is dat de functionele relatie niet correct wordt ingeschat, maar voor predicties is de proxy relatie voldoende. Het voordeel van lineaire regressie is dat additionele covariaten ook in rekening kunnen worden gebracht: dit kan de bias en variantie van de predicties verkleinen. Om gebruikt te worden in een transferfunctie, moeten we er zeker van zijn, dat de covariaat wel steeds ter beschikking is en dat deze zonder meetfout wordt gemeten.
 
 ## Zonder covariaten
