@@ -1,0 +1,28 @@
+# MA & SMA
+
+```{r, echo=F}
+load("data/data-wosis.rda")
+```
+
+Major axis (MA) en standardized major axis (SMA) zijn beschreven in @warton2006 en zijn geïmplementeerd in het R package `smatr` @warton2012. MA is net als Deming-regressie equivalent aan PCA. SMA is een PCA op gestandaardiseerde data. Beide zijn geschikt voor line-fitting (bv. allometrie), en kunnen de functionele relatie tussen $Y$ en $X$ inschatten indien enkel $W$ geobserveerd is; ze houden rekening met de meetfouten in de predictor. Ze zijn echter niet geschikt om in een nieuwe dataset predicties te doen. Een categorische covariaat kan gebruikt worden om te kijken of de MA en SMA verschillen tussen de levels van de covariaat.
+
+```{r, echo=T}
+library(smatr)
+
+smatr_ma <- ma(pHH2O ~ pHCa_obs, data = data_train)
+summary(smatr_ma)
+```
+
+```{r, echo = T}
+# predicties zijn expliciet niet geïmplementeerd in het smatr package:
+predict(smatr_ma, newdata = data_test)
+```
+
+Resultaten met SMA zijn zeer gelijkaardig:
+
+```{r, echo = T}
+smatr_sma <- sma(pHH2O ~ pHCa_obs, data = data_train)
+summary(smatr_sma)
+predict(smatr_sma, newdata = data_test)
+```
+
