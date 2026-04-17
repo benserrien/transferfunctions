@@ -31,7 +31,7 @@ summary(mecor_m1)
 
 Het niet-gecoorigeerde regressie-model kan gebruikt worden voor predicties te maken. Hieronder staan de predicties met coverage en RMSE.
 
-```{r, echo=F}
+```{r eval-mecor1, echo=F}
 # transferfunctie
 mecortf <- function(m, newdat) {
   # de predicties moeten gebeuren obv het niet-gecorrigeerde model
@@ -45,6 +45,8 @@ mecortf <- function(m, newdat) {
 # pas de transfer-functie toe op de test-dataset
 yhats      <- mecortf(mecor_m1, data_test)
 data_test6 <- cbind(data_test, yhats)
+
+source("functions/evaluate-transferfunction.R")
 evaluatie_tf(data_test6)
 ```
 
@@ -60,7 +62,7 @@ mecor_m2 <- mecor(
 summary(mecor_m2)
 ```
 
-```{r, echo=F}
+```{r eval-mecor2, echo=F}
 # transferfunctie
 mecortf <- function(m, newdat) {
   # de predicties moeten gebeuren obv het niet-gecorrigeerde model
@@ -91,7 +93,7 @@ mecor_m3 <- mecor(
 summary(mecor_m3)
 ```
 
-```{r, echo=F}
+```{r eval-mecor3, echo=F}
 # transferfunctie
 mecortf <- function(m, newdat) {
   # de predicties moeten gebeuren obv het niet-gecorrigeerde model
