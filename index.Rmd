@@ -21,8 +21,10 @@ Dit is mijn eerste ervaring met bookdown. Deze bookdown dient als kleine samenva
 # packages inladen
 library(tidyverse)
 library(sf)
-conflicted::conflict_prefer("filter","dplyr")
-conflicted::conflict_prefer("lag","dplyr")
+library(mcr)
+library(coat)
+library(mecor)
+library(brms)
 ```
 
 

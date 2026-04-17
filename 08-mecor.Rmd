@@ -7,7 +7,7 @@ load("data/data-wosis.rda")
 Het R package `mecor` van @nab2021 bevat de mogelijkheid om de data uit een substudie te gebruiken om te corrigeren voor measurement error in de predictor (of in de outcome, maar dat is voor de toepassing in het SoilHarmony project nvt). De functies uit dit package geven zowel de niet-gecorrigeerde (proxy relatie) als de gecorrigeerde regressie (functionele relatie). De niet-gecorrigeerde regressie kan gebruikt worden voor predicties te maken.  
 
 ```{r, echo=T}
-# ter vergelijking met de mcr-methoden printen we nog eens de relatie 
+# ter vergelijking met de mecor-methoden printen we nog eens de relatie 
 # Y vs. X:
 (lm(pHH2O ~ pHCa, data = data_wosis_pH))
 # Y vs. W:
@@ -31,7 +31,7 @@ summary(mecor_m1)
 
 Het niet-gecoorigeerde regressie-model kan gebruikt worden voor predicties te maken. Hieronder staan de predicties met coverage en RMSE.
 
-```{r, echo=F}
+```{r eval-mecor1, echo=F}
 # transferfunctie
 mecortf <- function(m, newdat) {
   # de predicties moeten gebeuren obv het niet-gecorrigeerde model
@@ -45,6 +45,8 @@ mecortf <- function(m, newdat) {
 # pas de transfer-functie toe op de test-dataset
 yhats      <- mecortf(mecor_m1, data_test)
 data_test6 <- cbind(data_test, yhats)
+
+source("functions/evaluate-transferfunction.R")
 evaluatie_tf(data_test6)
 ```
 
@@ -60,7 +62,7 @@ mecor_m2 <- mecor(
 summary(mecor_m2)
 ```
 
-```{r, echo=F}
+```{r eval-mecor2, echo=F}
 # transferfunctie
 mecortf <- function(m, newdat) {
   # de predicties moeten gebeuren obv het niet-gecorrigeerde model
@@ -91,7 +93,7 @@ mecor_m3 <- mecor(
 summary(mecor_m3)
 ```
 
-```{r, echo=F}
+```{r eval-mecor3, echo=F}
 # transferfunctie
 mecortf <- function(m, newdat) {
   # de predicties moeten gebeuren obv het niet-gecorrigeerde model
