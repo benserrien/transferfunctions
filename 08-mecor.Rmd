@@ -7,7 +7,7 @@ load("data/data-wosis.rda")
 Het R package `mecor` van @nab2021 bevat de mogelijkheid om de data uit een substudie te gebruiken om te corrigeren voor measurement error in de predictor (of in de outcome, maar dat is voor de toepassing in het SoilHarmony project nvt). De functies uit dit package geven zowel de niet-gecorrigeerde (proxy relatie) als de gecorrigeerde regressie (functionele relatie). De niet-gecorrigeerde regressie kan gebruikt worden voor predicties te maken.  
 
 ```{r, echo=T}
-# ter vergelijking met de mcr-methoden printen we nog eens de relatie 
+# ter vergelijking met de mecor-methoden printen we nog eens de relatie 
 # Y vs. X:
 (lm(pHH2O ~ pHCa, data = data_wosis_pH))
 # Y vs. W:
