@@ -138,9 +138,9 @@ data_train %>%
 
 ### Covariaat
 
-Tot slot visualiseren we ook nog de relatie tussen de pH en de covariaat (bulk densititeit). Figuur \@ref(fig:covariate) toont de relatie tussen beide tesamen met een scatterplot-smoother en een lineaire fit. De relatie lijkt voldoende lineair in eerste orde.
+Tot slot visualiseren we ook nog de relatie tussen de pH en de covariaat (bulk densititeit). Figuur \@ref(fig:covariaat) toont de relatie tussen beide tesamen met een scatterplot-smoother en een lineaire fit. De relatie lijkt voldoende lineair in eerste orde.
 
-```{r covariate, echo=F, warning=F, message=F}
+```{r covariaat, echo=F, warning=F, message=F, fig.cap = "Relatie tussen bulk densiteit van de bodem en pHH2O."}
 data_wosis_pH %>%
   ggplot(aes(bulk_dens, pHH2O)) +
   geom_point() +
