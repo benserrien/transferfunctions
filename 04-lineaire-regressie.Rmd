@@ -118,4 +118,4 @@ tibble(
 ) %>% knitr::kable()
 ```
 
-In dit voorbeeld hebben we gewerkt met een substudie met herhaalde metingen waarbij elke locatie een vast aantal herhaalde metingen had (3), maar voor de schatting van de ICC is dit niet per se nodig; de verschillende locaties kunnen een variabel aantal herhaalde metingen hebben. Het vast aantal herhaalde metingen hebben we gekozen omdat sommige functies uit het `mecor` package (zie verder) dit vereisen.
+In dit voorbeeld hebben we gewerkt met een substudie met herhaalde metingen waarbij elke locatie een vast aantal herhaalde metingen had (3), maar voor de schatting van de ICC is dit niet per se nodig; de verschillende locaties kunnen een variabel aantal herhaalde metingen hebben. Het vast aantal herhaalde metingen hebben we gekozen omdat sommige functies uit het `mecor` package (zie verder) dit vereisen. Ik heb nog niet kunnen achterhalen of deze methode ook kan gebruikt worden (mits aanpassingen) indien we werken met verschillende predictoren.
