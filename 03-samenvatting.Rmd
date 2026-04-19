@@ -1,13 +1,29 @@
 # Samenvatting verschillende methoden
 
-Hieronder staat een klein overzicht van de verschillende methoden die verderop aan bod komen. Meer details staan in de specifieke hoofdstukken.
+De volgende hoofdstukken passen verschillende methoden toe op de WOSIS dataset. Welke methode nu optimaal is voor gebruik in het SoilHarmony project zal afhangen van enkele parameters.
 
-## Lineaire regressie
+-   Ligt de focus op predicties (transferfunctie) of op het schatten van de functionele relatie?
 
--   Transferfunctie (predicties): ja.
+    -   Als predicties de hoofddoelstelling zijn (dit denk ik dat het geval is obv de mail van Hans), dan is regressie-dilutie door meetfouten in de predictor (\$X\$) eigenlijk geen probleem: de predicties van $Y$ op $W$ zijn niet gebiased. In dat geval is (Bayesiaanse) lineaire regressie
 
--   Schatten van functionele relatie met correctie voor regressie dilutie: nee.
+    -   In het geval de functionele relatie het belangrijkste is, dan zal met regressie-dilutie wel rekening gehouden moeten worden. Welke methode hiervoor optimaal is, zal dan afhankelijk zijn van of en welk type substudie er beschikbaar is om voor die dilutie te corrigeren.
 
--   Covariaten mogelijk: ja.
+-   Welke substudie is er beschikbaar om te corrigeren voor regressie-dilutie?
 
-## Bland-Altman analyse
+    -   Geen substudie: Zonder substudie lijken de methoden uit het `mcr` package (Deming en Passin-Bablok regressie) of het `smatr` pakage (major axis en standardized major axis) het meest aangewezen.
+
+    -   Substudie met herhaalde metingen: Dit geeft verschillende mogelijkheden: (1) correctie op basis van de ICC zoals in @frost2000 en een Bayesiaanse versie daarvan; (2) `mecor` package; (3) Bayesiaans errors-in-variables model met de `me()` functie uit het `brms` package.
+
+    -   Substudie zonder meetfout op de predictor: dan kunnen we het `mecor` package gebruiken met een regressie-calibratie.
+
+-   Is het belangrijk om extra covariaten te gebruiken in de transferfunctie? (naast de niet-referentiemethode als belangrijkste predictor) Extra covariaten kunnen handig zijn om de accuraatheid van de predicties te verhogen. Niet alle methoden kunnen extra covariaten in rekening brengen. Daarnaast moeten we ook rekening houden met meetfouten in de extra covariaten.
+
+    -   De functies uit het `mcr` package kunnen geen extra covariaten in rekening brengen.
+
+    -   De functies uit het `smatr` package kunnen 1 categorische covariaat toevoegen.
+
+    -   (Bayesiaanse) Lineaire regressie: in principe geen beperkingen op het toevoegen van extra covariaten. Of de extra covariaten ook met meetfouten worden gemeten, is in principe geen probleem want dat zal geen bias op de predicties geven.
+
+    -   De functies uit het `mecor` package veronderstellen dat slechts 1 covariaat meetfouten bevat. Andere covariaten kunnen worden toegevoegd, maar worden veronderstelt geen meetfouten te hebben.
+
+    -   De `me()` functie uit het `brms` package kan op elke covariaat worden toegepast, er zal dan wel voor elke covariaat een substudie nodig zijn om daarvan de SD van de meetfout te schatten.

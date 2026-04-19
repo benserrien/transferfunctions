@@ -76,13 +76,12 @@ data_wosis_pH %>%
   labs(color = "pHCa (X of W)")
 ```
 
-Het is duidelijk dat door de toevoeging van een meetfout op $X$ de relatie zwakker wordt (kleinere slope):
+Het is duidelijk dat door de toevoeging van een meetfout op $X$ de relatie zwakker wordt (kleinere slope). De puntschatting voor $\beta_X$ in de volledige dataset is 0.912 terwijl die voor $\beta_W$ gelijk is aan 0.796 (13% kleiner). In de volgende hoofdstukken presenteren we methoden om op basis van metingen van $W$ een schatting van $\beta_X$ te maken.
 
 ```{r slopes, echo = F}
 (lm(pHH2O ~ pHCa, data = data_wosis_pH))
 (lm(pHH2O ~ pHCa_obs, data = data_wosis_pH))
 ```
-
 
 ### Training- en test data
 
@@ -135,7 +134,6 @@ data_train %>%
   labs(x = "pHCa", y = "pHH2O")
 ```
 
-
 ### Covariaat
 
 Tot slot visualiseren we ook nog de relatie tussen de pH en de covariaat (bulk densititeit). Figuur \@ref(fig:covariaat) toont de relatie tussen beide tesamen met een scatterplot-smoother en een lineaire fit. De relatie lijkt voldoende lineair in eerste orde.
@@ -150,7 +148,7 @@ data_wosis_pH %>%
 
 ```{r, echo = F}
 # save datasets for use in other markdowns
-save(data_wosis, data_wosis_pH, data_train, data_test, tau2,
-     file = "data/data-wosis.rda")
+# save(data_wosis, data_wosis_pH, data_train, data_test, tau2,
+#      file = "data/data-wosis.rda")
 ```
 

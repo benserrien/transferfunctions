@@ -21,6 +21,7 @@ Dit is mijn eerste ervaring met bookdown. Deze bookdown dient als kleine samenva
 # packages inladen
 library(tidyverse)
 library(sf)
+library(lme4)
 library(mcr)
 library(coat)
 library(mecor)
