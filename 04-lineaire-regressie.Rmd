@@ -4,7 +4,7 @@
 load("data/data-wosis.rda")
 ```
 
-We negeren de aanwezigheid van de meetfouten in $X$ en gaan uit van de predictie obv $W$. Hiervoor is geen substudie nodig. Voor predicties te maken is lineaire regressie voldoende, het nadeel is dat de functionele relatie niet correct wordt ingeschat, maar voor predicties is de proxy relatie voldoende. Het voordeel van lineaire regressie is dat additionele covariaten ook in rekening kunnen worden gebracht: dit kan de bias en variantie van de predicties verkleinen. Om gebruikt te worden in een transferfunctie, moeten we er zeker van zijn, dat de covariaat wel steeds ter beschikking is en dat deze zonder meetfout wordt gemeten.
+We negeren de aanwezigheid van de meetfouten in $X$ en gaan uit van de predictie obv $W$. Hiervoor is geen substudie nodig. Voor predicties te maken is lineaire regressie voldoende, het nadeel is dat de functionele relatie niet correct wordt ingeschat, maar voor predicties is de proxy relatie voldoende. Het voordeel van lineaire regressie is dat additionele covariaten ook in rekening kunnen worden gebracht: dit kan de bias en variantie van de predicties verkleinen. Om gebruikt te worden in een transferfunctie, moeten we er zeker van zijn, dat de covariaat wel steeds ter beschikking is.
 
 ## Zonder covariaten
 
@@ -18,7 +18,8 @@ m1 <- lm(pHH2O ~ pHCa_obs, data = data_train)
 summary(m1)
 ```
 
-We maken nu een transferfunctie obv het gefitte model en passen dit toe op de test-dataset. We berekenen de coverage (% van de observaties in de test-dataset waarvoor het predictie-interval de echte waarde van pHH2O bevat) en de root-mean-square-error: 
+We maken nu een transferfunctie obv het gefitte model en passen dit toe op de test-dataset. We berekenen de coverage (% van de observaties in de test-dataset waarvoor het predictie-interval de echte waarde van pHH2O bevat) en de root-mean-square-error:
+
 $$RMSE = \sqrt{n^{-1}\sum_i{(y_i - \hat{y}_i)^2}}$$
 
 ```{r, echo = T}
@@ -66,3 +67,55 @@ data_test2 <- cbind(data_test, yhats)
 evaluatie_tf(data_test2)
 ```
 
+## Correctie via ICC
+
+Het lineaire regressie-model kan perfect dienen als transferfunctie en geeft unbiased predicties. Indien we naast predicties ook geïnteresseerd zijn in een schatting voor $\beta_X$, dan zijn de modellen wel gebiased: $\hat{\beta}_W \neq \hat{\beta}_X$. @frost2000 presenteren verschillende methoden om in het geval van simpele lineaire regressie zonder extra covariaten een correctie-factor $\lambda$ te schatten die gebruikt kan worden om te corrigeren voor meetfouten in de predictor: $\hat{\beta}_X = \hat{\lambda} \hat{\beta}_W$. De methode die uit hun simulaties als meest efficiënt naar voor komt en die makkelijk in gebruik is, is die op basis van de Intra-Class-Correlation (ICC; $\hat{\lambda} = ICC^{-1}$). De ICC kunnen we schatten obv een substudie met herhaalde metingen.
+
+```{r, echo = T}
+# zet de dataset in long-format
+data_sub_train_long <- data_train %>%
+  st_drop_geometry() %>%
+  filter(substudy == 1) %>%
+  select(layer_id, pHCa_obs, pHCa_obs2, pHCa_obs3) %>%
+  pivot_longer(c(pHCa_obs, pHCa_obs2, pHCa_obs3), 
+               names_to = "replicate", values_to = "pHCa_obs")
+
+# linear mixed effects model
+# fit met REML want we zijn geïnteresseerd in de variantie-componenten
+lmer_replicates <- lmer(
+  pHCa_obs ~ 1 + (1|layer_id),
+  REML = TRUE, 
+  data = data_sub_train_long
+)
+summary(lmer_replicates)
+```
+
+@frost2000 presenteren ook de methode om een 95% CI te berekenen voor $\hat{\beta}_X$ die zowel rekening houdt met de onzekerheid op de correctie-factor als met de onzekerheid in het lineair model (obv Fieller's theorema). We passen dit hieronder toe. De schatting ligt zeer dicht bij de waarde van 0.912 in de volledige dataset en het 95% CI omvat de echte waarde.
+
+```{r, echo = T}
+# extraheer de ICC uit het model
+RE.cov     <- as.data.frame(VarCorr(lmer_replicates))
+ICC        <- RE.cov$vcov[1] / sum(RE.cov$vcov)
+lambda_hat <- 1/ICC
+
+# pas de correctie-factor toe op de schatting uit model `m1`
+beta_X_hat <- coef(m1)[2] * lambda_hat
+
+# Fieller's methode voor 95% CI:
+n                 <- length(unique(data_sub_train_long$layer_id))
+var_lambda_hat    <- (lambda_hat^2 - 1)^2 / n
+var_invlambda_hat <- var_lambda_hat / lambda_hat^4
+f0 <- unname(coef(m1)[2])^2 - qnorm(.975)^2 * vcov(m1)[2,2]
+f1 <- unname(coef(m1)[2]) / lambda_hat # negeer covariantie studie & substudie
+f2 <- 1 / lambda_hat^2 - qnorm(.975)^2 * var_invlambda_hat
+
+beta_X_hatCI <- (f1 + c(-1, 1) * sqrt(f1^2 - f0*f2)) / f2
+
+tibble(
+  estimate = beta_X_hat,
+  ll       = beta_X_hatCI[1],
+  ul       = beta_X_hatCI[2]
+) %>% knitr::kable()
+```
+
+In dit voorbeeld hebben we gewerkt met een substudie met herhaalde metingen waarbij elke locatie een vast aantal herhaalde metingen had (3), maar voor de schatting van de ICC is dit niet per se nodig; de verschillende locaties kunnen een variabel aantal herhaalde metingen hebben. Het vast aantal herhaalde metingen hebben we gekozen omdat sommige functies uit het `mecor` package (zie verder) dit vereisen.
