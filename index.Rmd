@@ -4,11 +4,11 @@ author: "Ben Serrien"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
-bibliography: [packages.bib]
+bibliography: ["packages.bib", "references.bib"]
 # url: your book url like https://bookdown.org/yihui/bookdown
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
-  Dit is mijn eerste ervaring met bookdown.
+  SoilHarmony transferfunctions
 link-citations: yes
 github-repo: benserrien/transferfunctions
 ---
@@ -27,7 +27,6 @@ library(coat)
 library(mecor)
 library(brms)
 ```
-
 
 
 ```{r echo=FALSE}
