@@ -1,0 +1,191 @@
+---
+references:
+- id: mosley2024
+  accessed: "09:06:50"
+  author:
+  - family: Mosley
+    given: Luke M.
+  - family: Rengasamy
+    given: Pichu
+  - family: Fitzpatrick
+    given: Rob
+  container-title: European Journal of Soil Science
+  container-title-short: European J Soil Science
+  DOI: 10.1111/ejss.70021
+  ISSN: 1351-0754, 1365-2389
+  issue: 6
+  issued: 2024-09
+  key: A8JZ3979
+  language: en
+  libraryID: 1
+  page: e70021
+  providerKey: Zotero
+  source: DOI.org (Crossref)
+  title: "Soil [pH]{.smallcaps} : Techniques, challenges and insights
+    from a global dataset"
+  title-short: Soil \<span style=\"font-variant
+  type: article-journal
+  URL: "https://bsssjournals.onlinelibrary.wiley.com/doi/10.1111/ejss.70021"
+  volume: 75
+- id: frost2000
+  accessed: "12:43:39"
+  author:
+  - family: Frost
+    given: Chris
+  - family: Thompson
+    given: Simon G.
+  container-title: "Journal of the Royal Statistical Society Series A:
+    Statistics in Society"
+  DOI: 10.1111/1467-985X.00164
+  ISSN: 0964-1998, 1467-985X
+  issue: 2
+  issued: 2000-03-01
+  key: EIKNKF3S
+  language: en
+  libraryID: 1
+  page: 173-189
+  providerKey: Zotero
+  rights: "https://academic.oup.com/journals/pages/open_access/funder_policies/chorus/standard_publication_model"
+  source: DOI.org (Crossref)
+  title: "Correcting for Regression Dilution Bias: Comparison of Methods
+    for a Single Predictor Variable"
+  title-short: Correcting for Regression Dilution Bias
+  type: article-journal
+  URL: "https://academic.oup.com/jrsssa/article/163/2/173/7102308"
+  volume: 163
+- id: karapetyan2025
+  accessed: "07:13:43"
+  author:
+  - family: Karapetyan
+    given: Siranush
+  - family: Zeileis
+    given: Achim
+  - family: Henriksen
+    given: André
+  - family: Hapfelmeier
+    given: Alexander
+  citationKey: karapetyan2025
+  container-title: "Journal of the Royal Statistical Society Series C:
+    Applied Statistics"
+  DOI: 10.1093/jrsssc/qlae077
+  ISSN: 0035-9254, 1467-9876
+  issue: 3
+  issued: 2025-06-16
+  key: 6TPHJ4SN
+  language: en
+  libraryID: 1
+  page: 775-799
+  providerKey: Zotero
+  rights: "https://creativecommons.org/licenses/by/4.0/"
+  source: DOI.org (Crossref)
+  title: Tree models for assessing covariate-dependent method agreement
+    with an application to physical activity measurements
+  type: article-journal
+  URL: "https://academic.oup.com/jrsssc/article/74/3/775/7942358"
+  volume: 74
+- id: potapov2024
+  author:
+  - family: Potapov
+    given: Sergej
+  - family: Model
+    given: Fabian
+  - family: Schuetzenmeister
+    given: Andre
+  - family: Manuilova
+    given: Ekaterina
+  - family: Dufey
+    given: Florian
+  genre: R
+  issued: 2024
+  key: EW4GYHZC
+  libraryID: 1
+  providerKey: Zotero
+  title: "mcr: Method Comparison Regression"
+  type: book
+  URL: "https://CRAN.R-project.org/package=mcr"
+  versionNumber: R package version 1.3.3.1
+- id: warton2006
+  accessed: "12:43:40"
+  author:
+  - family: Warton
+    given: David I.
+  - family: Wright
+    given: Ian J.
+  - family: Falster
+    given: Daniel S.
+  - family: Westoby
+    given: Mark
+  container-title: Biological Reviews
+  container-title-short: Biological Reviews
+  DOI: 10.1017/S1464793106007007
+  ISSN: 1464-7931, 1469-185X
+  issue: 2
+  issued: 2006-05
+  key: ZY3LRHMQ
+  language: en
+  libraryID: 1
+  page: 259-291
+  providerKey: Zotero
+  source: DOI.org (Crossref)
+  title: Bivariate line‐fitting methods for allometry
+  type: article-journal
+  URL: "https://onlinelibrary.wiley.com/doi/10.1017/S1464793106007007"
+  volume: 81
+- id: warton2012
+  accessed: "19:36:03"
+  author:
+  - family: Warton
+    given: David I.
+  - family: Duursma
+    given: Remko A.
+  - family: Falster
+    given: Daniel S.
+  - family: Taskinen
+    given: Sara
+  container-title: Methods in Ecology and Evolution
+  container-title-short: Methods Ecol Evol
+  DOI: 10.1111/j.2041-210X.2011.00153.x
+  ISSN: 2041-210X, 2041-210X
+  issue: 2
+  issued: 2012-04
+  key: R7T3TNXD
+  language: en
+  libraryID: 1
+  page: 257-259
+  providerKey: Zotero
+  rights: "http://onlinelibrary.wiley.com/termsAndConditions#vor"
+  source: DOI.org (Crossref)
+  title: smatr 3-- an R package for estimation and inference about
+    allometric lines
+  type: article-journal
+  URL: "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2011.00153.x"
+  volume: 3
+- id: nab2021
+  accessed: "19:33:23"
+  author:
+  - family: Nab
+    given: Linda
+  - family: Van Smeden
+    given: Maarten
+  - family: Keogh
+    given: Ruth H.
+  - family: Groenwold
+    given: Rolf H.H.
+  container-title: Computer Methods and Programs in Biomedicine
+  container-title-short: Computer Methods and Programs in Biomedicine
+  DOI: 10.1016/j.cmpb.2021.106238
+  ISSN: 01692607
+  issued: 2021-09
+  key: HUQM78NB
+  language: en
+  libraryID: 1
+  page: 106238
+  providerKey: Zotero
+  source: DOI.org (Crossref)
+  title: "Mecor: An R package for measurement error correction in linear
+    regression models with a continuous outcome"
+  title-short: Mecor
+  type: article-journal
+  URL: "https://linkinghub.elsevier.com/retrieve/pii/S0169260721003126"
+  volume: 208
+...
