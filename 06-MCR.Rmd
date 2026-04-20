@@ -4,11 +4,9 @@
 load("data/data-wosis.rda")
 ```
 
-Het R packge `mcr` kan gebruikt worden om twee meetmethoden te vergelijken met regressie-analyse [@R-mcr]. Sommige regressie methoden in dit package houden rekening met meetfouten in de predictor en zijn dus geschikt om de functionele relatie tussen $Y$ en $X$ te schatten. De methoden uit dit package hebben geen substudie nodig (geen herhaalde metingen van de predictor). Covariaten kunnen niet in rekening gebracht worden in de modellen van het `mcr` package. Predicties voor het gebruik in transferfuncties zijn niet mogelijk: in de praktijk beschikt men enkel over de metingen met meetfout dus de functionele relatie kan niet gebruikt worden om predicties te doen. Dit zijn pure line-fitting methoden.
+Het R packge `mcr` kan gebruikt worden om twee meetmethoden te vergelijken met regressie-analyse [@potapov2024]. Sommige regressie methoden in dit package houden rekening met meetfouten in de predictor en zijn dus geschikt om de functionele relatie tussen $Y$ en $X$ te schatten. De methoden uit dit package hebben geen substudie nodig (geen herhaalde metingen van de predictor). Covariaten kunnen niet in rekening gebracht worden in de modellen van het `mcr` package. Predicties voor het gebruik in transferfuncties zijn niet mogelijk: in de praktijk beschikt men enkel over de metingen met meetfout dus de functionele relatie kan niet gebruikt worden om predicties te doen. Dit zijn pure line-fitting methoden. Misschien zijn er varianten van deze modellen die meer van toepassing zijn voor SoilHarmony?
 
 ```{r, echo=T}
-library(mcr)
-
 # ter vergelijking met de mcr-methoden printen we nog eens de relatie 
 # Y vs. X:
 (lm(pHH2O ~ pHCa, data = data_wosis_pH))

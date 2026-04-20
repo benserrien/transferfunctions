@@ -4,10 +4,6 @@
 load("data/data-wosis.rda")
 ```
 
-## Error-in-variables model
-
-Het R package `brms` kan ook gebruikt worden voor Bayesiaanse modellen die rekening houden met meetfouten in de predictor (Bayesian error-in-variables model). Het makkelijkst kunnen we werken met de `me()` functie: die functie neemt als extra argument de SD van de meetfouten in de predictor. 
-
 ```{r, echo=T}
 # ter vergelijking met de Bayesiaanse methode printen we nog eens de relatie 
 # Y vs. X:
@@ -16,10 +12,41 @@ Het R package `brms` kan ook gebruikt worden voor Bayesiaanse modellen die reken
 (lm(pHH2O ~ pHCa_obs, data = data_wosis_pH))
 ```
 
+## Naïeve regressie
+
+Net als bij lineaire regressie, negeren we eerst de meetfouten in $X$. We fitten een Bayesiaans model waarbij we de default priors uit het `brms` package gebruiken. Voor een simpele lineaire regressie zijn deze default priors goed.
+
+```{r, echo=T, eval=F}
+blm <- brm(
+  pHH2O ~ pHCa_obs,
+  cores = 4, chains = 4,
+  data = data_train,
+  silent = 2, refresh = 0
+)
+```
+
+```{r, echo=F}
+# save(blm, file = "data/blm.rda")
+load("data/blm.rda")
+summary(blm)
+```
+
+
+```{r, echo = F}
+a <- pp_check(blm, ndraws = 200)
+b <- ggplot(data_train, aes(pHCa_obs, pHH2O)) +
+  geom_smooth(method = "loess") +
+  geom_smooth(method = "lm", color = "red")
+```
+
+
+## Error-in-variables model
+
+Het R package `brms` kan ook gebruikt worden voor Bayesiaanse modellen die rekening houden met meetfouten in de predictor (Bayesian error-in-variables model). Het makkelijkst kunnen we werken met de `me()` functie: die functie neemt als extra argument de SD van de meetfouten in de predictor.
+
 In onze dataset hebben we de meetfout zelf gesimuleerd uit een normale verdeling met SD = $\sqrt{0.3}$. In de praktijk zal die meestal niet gekend zijn, maar kunnen we die wel schatten op basis van de substudie met herhaalde metingen van de predictor ($W$). We gebruiken hiervoor een mixed-effects model:
 
-$$W_{ij} \sim \beta_0 + b_{0i} + e_{ij}$$
-met random intercepts voor locaties: $b_{0i} \sim N(0, \sigma_b^2)$ en $e_{ij} \sim N(0, \sigma^2)$. De schatting van de residual SD $\hat{\sigma}$ kunnen we dan in de `me()` functie gebruiken. In onze gesimuleerde dataset hebben we 3 replicates per locatie in de substudie, maar dit zou kunnen verschillen in de praktijk (het aantal replicates moest gelijk zijn voor gebruik in het `mecor` package). Hieronder staat de samenvatting van het model. De Rhat waarde licht dicht genoeg bij 1, dus de MCMC-ketens zijn goed geconvergeerd. De posterior-predictive check geeft aan dat de goodness-of-fit beter zou kunnen. Figuur \@ref(fig:posterior-sigma) geeft de posterior distributie weer voor de residual SD.
+$$W_{ij} \sim \beta_0 + b_{0i} + e_{ij}$$ met random intercepts voor locaties: $b_{0i} \sim N(0, \sigma_b^2)$ en $e_{ij} \sim N(0, \sigma^2)$. De schatting van de residual SD $\hat{\sigma}$ kunnen we dan in de `me()` functie gebruiken. In onze gesimuleerde dataset hebben we 3 replicates per locatie in de substudie, maar dit zou kunnen verschillen in de praktijk (het aantal replicates moest gelijk zijn voor gebruik in het `mecor` package). Hieronder staat de samenvatting van het model. De Rhat waarde licht dicht genoeg bij 1, dus de MCMC-ketens zijn goed geconvergeerd. De posterior-predictive check geeft aan dat de goodness-of-fit beter zou kunnen. Figuur \@ref(fig:posterior-sigma) geeft de posterior distributie weer voor de residual SD.
 
 ```{r, echo=T, eval=F}
 # zet de dataset in long-format
@@ -98,6 +125,8 @@ data_test10 <- cbind(data_test, yhats)
 source("functions/evaluate-transferfunction.R")
 evaluatie_tf(data_test10)
 ```
+
+Als alternatief op het gebruik van de `me()` functie kunnen we de methode van @frost2000 ook makkelijk vertalen naar een Bayesiaanse versie: uit het mixed-effects model kunnen we de ICC berekenen en deze gebruiken om de simpele lineaire regressie te corrigeren voor regressie-dilutie.
 
 ## Latent-variable model
 
