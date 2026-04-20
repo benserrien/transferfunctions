@@ -90,7 +90,7 @@ lmer_replicates <- lmer(
 summary(lmer_replicates)
 ```
 
-@frost2000 presenteren ook de methode om een 95% CI te berekenen voor $\hat{\beta}_X$ die zowel rekening houdt met de onzekerheid op de correctie-factor als met de onzekerheid in het lineair model (obv Fieller's theorema). We passen dit hieronder toe. De schatting ligt zeer dicht bij de waarde van 0.912 in de volledige dataset en het 95% CI omvat de echte waarde.
+@frost2000 presenteren ook de methode om een 95% CI te berekenen voor $\hat{\beta}_X$ die zowel rekening houdt met de onzekerheid op de correctie-factor als met de onzekerheid in het lineair model (obv Fieller's theorema). We passen dit hieronder toe. De schatting ligt zeer dicht bij de waarde van 0.912 in de volledige dataset en het 95% CI omvat de echte waarde ( [zie hoofdstuk data](#notatie)).
 
 ```{r, echo = T}
 # extraheer de ICC uit het model
