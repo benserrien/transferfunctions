@@ -5,17 +5,19 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: ["packages.bib", "references.bib"]
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/research-institute-for-nature-and-forest.csl
+zotero: true
+link-citations: yes
 # url: your book url like https://bookdown.org/yihui/bookdown
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
   SoilHarmony transferfunctions
-link-citations: yes
 github-repo: benserrien/transferfunctions
 ---
 
 # Welkom
 
-Dit is mijn eerste ervaring met bookdown. Deze bookdown dient als kleine samenvatting van mijn literatuurstudie rond "regression dilution" in het kader van het SoilHarmony project waarop ik begin te werken bij INBO.
+Dit is mijn eerste ervaring met bookdown. Deze bookdown dient als kleine samenvatting van mijn mini-literatuurstudie rond *regression dilution* in het kader van het SoilHarmony project waarop ik begin te werken bij INBO.
 
 ```{r packages, echo=T, message=F, warning=F}
 # packages inladen

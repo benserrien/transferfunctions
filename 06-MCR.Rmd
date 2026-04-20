@@ -4,7 +4,7 @@
 load("data/data-wosis.rda")
 ```
 
-Het R packge `mcr` kan gebruikt worden om twee meet-methoden te vergelijken met regressie-analyse. Sommige regressie methoden in dit package houden rekening met meetfouten in de predictor en zijn dus geschikt om de functionele relatie tussen $Y$ en $X$ te schatten. De methoden uit dit package hebben geen substudie nodig (geen herhaalde metingen van de predictor). Covariaten kunnen niet in rekening gebracht worden in de modellen van het `mcr` package. Predicties voor het gebruik in transferfuncties zijn niet mogelijk: in de praktijk beschikt men enkel over de metingen met meetfout dus de functionele relatie kan niet gebruikt worden om predicties te doen. Dit zijn pure line-fitting methoden.
+Het R packge `mcr` kan gebruikt worden om twee meetmethoden te vergelijken met regressie-analyse [@R-mcr]. Sommige regressie methoden in dit package houden rekening met meetfouten in de predictor en zijn dus geschikt om de functionele relatie tussen $Y$ en $X$ te schatten. De methoden uit dit package hebben geen substudie nodig (geen herhaalde metingen van de predictor). Covariaten kunnen niet in rekening gebracht worden in de modellen van het `mcr` package. Predicties voor het gebruik in transferfuncties zijn niet mogelijk: in de praktijk beschikt men enkel over de metingen met meetfout dus de functionele relatie kan niet gebruikt worden om predicties te doen. Dit zijn pure line-fitting methoden.
 
 ```{r, echo=T}
 library(mcr)
@@ -65,5 +65,3 @@ mcr4 <- mcreg(data_train$pHCa_obs, data_train$pHH2O,
               method.ci = "analytical")
 summary(mcr4)
 ```
-
-

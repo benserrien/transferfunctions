@@ -4,7 +4,7 @@
 load("data/data-wosis.rda")
 ```
 
-Bland-Altman (BA) analyse is een veelgebruikte techniek voor het vergelijken van twee methoden. Een BA-analyse geeft het verschil tussen twee gepaarde metingen (y-as) weer in functie van het gemiddelde van beide metingen (x-as). De uitkomst van de analyse is de bias (gemiddelde van het verschil tussen beide methoden) en de limits-of-agreement (LoA; 95% CI voor het verschil tussen beide methoden). Dit kan niet gebruikt worden voor transferfuncties (BA is geen model), maar kan puur descriptief wel interessant zijn. Een BA-analyse houdt ook geen rekening met meetfouten in de niet-referentiemethode. We gebruiken het R package `coat` voor de analyse (conditional method agreement trees) @karapetyan2025.
+Bland-Altman (BA) analyse is een veelgebruikte techniek voor het vergelijken van twee methoden. Een BA-analyse geeft het verschil tussen twee gepaarde metingen (y-as) weer in functie van het gemiddelde van beide metingen (x-as). De uitkomst van de analyse is de bias (gemiddelde van het verschil tussen beide methoden) en de limits-of-agreement (LoA; 95% CI voor het verschil tussen beide methoden). Dit kan niet gebruikt worden voor transferfuncties (BA is geen model), maar kan puur descriptief wel interessant zijn. Een BA-analyse houdt ook geen rekening met meetfouten in de niet-referentiemethode. We gebruiken het R package `coat` (conditional method agreement trees) voor de analyse [@coat2025].
 
 ## Zonder covariaten
 
