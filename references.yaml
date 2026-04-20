@@ -13,7 +13,7 @@
 	langid = {en}
 }
 
-@Article{coat2025,
+@Article{karapetyan2025,
   title = {Tree models for assessing covariate-dependent method agreement with an application to physical activity measurements},
   author = {Siranush Karapetyan and Achim Zeileis and André Henriksen and Alexander Hapfelmeier},
   journal = {Journal of the Royal Statistical Society Series C: Applied Statistics},
