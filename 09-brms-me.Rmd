@@ -45,7 +45,7 @@ load("data/mixed-replicates.rda")
 summary(mixed_replicates)
 ```
 
-```{r, echo = T}
+```{r pp-check-mixed-replicates, echo = T, fig.cap = "Posterior predictive distribution."}
 # de posterior-predictive check geeft toch een lichte afwijking tussen geobserveerde en gesimuleerde waarden voor W => het model zou eigenlijk beter moeten, maar voor deze oefening houden we het hierbij
 pp_check(mixed_replicates, ndraws = 200)
 ```
