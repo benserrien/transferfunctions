@@ -8,7 +8,7 @@ bibliography: ["references.yml","packages.bib"]
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/research-institute-for-nature-and-forest.csl
 zotero: true
 link-citations: yes
-# url: your book url like https://bookdown.org/yihui/bookdown
+url: https://benserrien.github.io/transferfunctions/
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
   SoilHarmony transferfunctions
