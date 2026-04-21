@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Hoofdstuk 5 Lineaire regressie | Transferfuncties voor het SoilHarmony project</title>
+  <meta name="description" content="SoilHarmony transferfunctions" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Hoofdstuk 5 Lineaire regressie | Transferfuncties voor het SoilHarmony project" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="SoilHarmony transferfunctions" />
+  <meta name="github-repo" content="benserrien/transferfunctions" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Hoofdstuk 5 Lineaire regressie | Transferfuncties voor het SoilHarmony project" />
+  
+  <meta name="twitter:description" content="SoilHarmony transferfunctions" />
+  
+
+<meta name="author" content="Ben Serrien" />
+
+
+<meta name="date" content="2026-04-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="samenvatting-verschillende-methoden.html"/>
+<link rel="next" href="bland-altman-analyse.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Transferfuncties</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welkom</a></li>
+<li class="chapter" data-level="2" data-path="soilharmony-project.html"><a href="soilharmony-project.html"><i class="fa fa-check"></i><b>2</b> SoilHarmony project</a></li>
+<li class="chapter" data-level="3" data-path="notatie.html"><a href="notatie.html"><i class="fa fa-check"></i><b>3</b> Notatie en data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="notatie.html"><a href="notatie.html#notatie-1"><i class="fa fa-check"></i><b>3.1</b> Notatie</a></li>
+<li class="chapter" data-level="3.2" data-path="notatie.html"><a href="notatie.html#data"><i class="fa fa-check"></i><b>3.2</b> Data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="notatie.html"><a href="notatie.html#training--en-test-data"><i class="fa fa-check"></i><b>3.2.1</b> Training- en test data</a></li>
+<li class="chapter" data-level="3.2.2" data-path="notatie.html"><a href="notatie.html#substudie"><i class="fa fa-check"></i><b>3.2.2</b> Substudie</a></li>
+<li class="chapter" data-level="3.2.3" data-path="notatie.html"><a href="notatie.html#covariaat"><i class="fa fa-check"></i><b>3.2.3</b> Covariaat</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="samenvatting-verschillende-methoden.html"><a href="samenvatting-verschillende-methoden.html"><i class="fa fa-check"></i><b>4</b> Samenvatting verschillende methoden</a></li>
+<li class="chapter" data-level="5" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html"><i class="fa fa-check"></i><b>5</b> Lineaire regressie</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html#zonder-covariaten"><i class="fa fa-check"></i><b>5.1</b> Zonder covariaten</a></li>
+<li class="chapter" data-level="5.2" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html#met-covariaten"><i class="fa fa-check"></i><b>5.2</b> Met covariaten</a></li>
+<li class="chapter" data-level="5.3" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html#correctie-via-icc"><i class="fa fa-check"></i><b>5.3</b> Correctie via ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="bland-altman-analyse.html"><a href="bland-altman-analyse.html"><i class="fa fa-check"></i><b>6</b> Bland-Altman analyse</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="bland-altman-analyse.html"><a href="bland-altman-analyse.html#zonder-covariaten-1"><i class="fa fa-check"></i><b>6.1</b> Zonder covariaten</a></li>
+<li class="chapter" data-level="6.2" data-path="bland-altman-analyse.html"><a href="bland-altman-analyse.html#met-covariaten-1"><i class="fa fa-check"></i><b>6.2</b> Met covariaten</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html"><i class="fa fa-check"></i><b>7</b> Method Comparison Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#deming-regressie-total-least-squares"><i class="fa fa-check"></i><b>7.1</b> Deming regressie (total least-squares)</a></li>
+<li class="chapter" data-level="7.2" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#theil-sen-regressie"><i class="fa fa-check"></i><b>7.2</b> Theil-Sen regressie</a></li>
+<li class="chapter" data-level="7.3" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#passing-bablok-regressie"><i class="fa fa-check"></i><b>7.3</b> Passing-Bablok regressie</a></li>
+<li class="chapter" data-level="7.4" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#equivariante-passing-bablok-regressie"><i class="fa fa-check"></i><b>7.4</b> Equivariante Passing-Bablok regressie</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="pca-ma-sma.html"><a href="pca-ma-sma.html"><i class="fa fa-check"></i><b>8</b> PCA: MA &amp; SMA</a></li>
+<li class="chapter" data-level="9" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html"><i class="fa fa-check"></i><b>9</b> Measurement Error Correction</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#replicatie-substudie"><i class="fa fa-check"></i><b>9.1</b> Replicatie-substudie</a></li>
+<li class="chapter" data-level="9.2" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#validatie-substudie-intern"><i class="fa fa-check"></i><b>9.2</b> Validatie-substudie (intern)</a></li>
+<li class="chapter" data-level="9.3" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#validatie-substudie-extern"><i class="fa fa-check"></i><b>9.3</b> Validatie-substudie (extern)</a></li>
+<li class="chapter" data-level="9.4" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#andere-substudies"><i class="fa fa-check"></i><b>9.4</b> Andere substudies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bayesiaanse-regressie.html"><a href="bayesiaanse-regressie.html"><i class="fa fa-check"></i><b>10</b> Bayesiaanse regressie</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="bayesiaanse-regressie.html"><a href="bayesiaanse-regressie.html#error-in-variables-model"><i class="fa fa-check"></i><b>10.1</b> Error-in-variables model</a></li>
+<li class="chapter" data-level="10.2" data-path="bayesiaanse-regressie.html"><a href="bayesiaanse-regressie.html#latent-variable-model"><i class="fa fa-check"></i><b>10.2</b> Latent-variable model</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referenties.html"><a href="referenties.html"><i class="fa fa-check"></i>Referenties</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Transferfuncties voor het SoilHarmony project</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="lineaire-regressie" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Hoofdstuk 5</span> Lineaire regressie<a href="lineaire-regressie.html#lineaire-regressie" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>We negeren de aanwezigheid van de meetfouten in <span class="math inline">\(X\)</span> en gaan uit van de predictie obv <span class="math inline">\(W\)</span>. Hiervoor is geen substudie nodig. Voor predicties te maken is lineaire regressie voldoende, het nadeel is dat de functionele relatie niet correct wordt ingeschat, maar voor predicties is de proxy relatie voldoende. Het voordeel van lineaire regressie is dat additionele covariaten ook in rekening kunnen worden gebracht: dit kan de bias en variantie van de predicties verkleinen. Om gebruikt te worden in een transferfunctie, moeten we er zeker van zijn, dat de covariaat wel steeds ter beschikking is.</p>
+<div id="zonder-covariaten" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Zonder covariaten<a href="lineaire-regressie.html#zonder-covariaten" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We modelleren een lineaire relatie tussen <span class="math inline">\(Y\)</span> en <span class="math inline">\(W\)</span> in de training-dataset:</p>
+<p><span class="math display">\[Y_i \sim N(\beta_0 + \beta_WW_i, \sigma^2)\]</span></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="lineaire-regressie.html#cb8-1" tabindex="-1"></a><span class="co"># lineair model zonder covariaten</span></span>
+<span id="cb8-2"><a href="lineaire-regressie.html#cb8-2" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(pHH2O <span class="sc">~</span> pHCa_obs, <span class="at">data =</span> data_train)</span>
+<span id="cb8-3"><a href="lineaire-regressie.html#cb8-3" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = pHH2O ~ pHCa_obs, data = data_train)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.16646 -0.36315  0.00396  0.36324  2.81984 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.743026   0.011764   148.2   &lt;2e-16 ***
+## pHCa_obs    0.796047   0.001882   422.9   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5393 on 34871 degrees of freedom
+## Multiple R-squared:  0.8368, Adjusted R-squared:  0.8368 
+## F-statistic: 1.788e+05 on 1 and 34871 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We maken nu een transferfunctie obv het gefitte model en passen dit toe op de test-dataset. We berekenen de coverage (% van de observaties in de test-dataset waarvoor het predictie-interval de echte waarde van pHH2O bevat) en de root-mean-square-error:</p>
+<p><span class="math display">\[RMSE = \sqrt{n^{-1}\sum_i{(y_i - \hat{y}_i)^2}}\]</span></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="lineaire-regressie.html#cb10-1" tabindex="-1"></a><span class="co"># transferfunctie</span></span>
+<span id="cb10-2"><a href="lineaire-regressie.html#cb10-2" tabindex="-1"></a>tf1 <span class="ot">&lt;-</span> <span class="cf">function</span>(m, newdat) {</span>
+<span id="cb10-3"><a href="lineaire-regressie.html#cb10-3" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(m, <span class="at">newdata =</span> newdat, </span>
+<span id="cb10-4"><a href="lineaire-regressie.html#cb10-4" tabindex="-1"></a>                  <span class="at">interval =</span> <span class="st">&quot;prediction&quot;</span>, <span class="at">level =</span> .<span class="dv">95</span>)</span>
+<span id="cb10-5"><a href="lineaire-regressie.html#cb10-5" tabindex="-1"></a>  <span class="fu">return</span>(yhat)</span>
+<span id="cb10-6"><a href="lineaire-regressie.html#cb10-6" tabindex="-1"></a>}</span>
+<span id="cb10-7"><a href="lineaire-regressie.html#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="lineaire-regressie.html#cb10-8" tabindex="-1"></a><span class="co"># pas de transfer-functie toe op de test-dataset</span></span>
+<span id="cb10-9"><a href="lineaire-regressie.html#cb10-9" tabindex="-1"></a>yhats      <span class="ot">&lt;-</span> <span class="fu">tf1</span>(m1, data_test)</span>
+<span id="cb10-10"><a href="lineaire-regressie.html#cb10-10" tabindex="-1"></a>data_test1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data_test, yhats)</span></code></pre></div>
+<div class="figure">
+<img src="_main_files/figure-html/eval_linreg1-1.png" alt="Evaluatie van de test-dataset met de transferfunctie." width="672" />
+<p class="caption">
+(#fig:eval_linreg1)Evaluatie van de test-dataset met de transferfunctie.
+</p>
+</div>
+</div>
+<div id="met-covariaten" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Met covariaten<a href="lineaire-regressie.html#met-covariaten" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We voegen nu een covariaat toe aan het model:</p>
+<p><span class="math display">\[Y_i \sim N(\beta_0 + \beta_WW_i + \beta_ZZ_i, \sigma^2)\]</span></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="lineaire-regressie.html#cb11-1" tabindex="-1"></a><span class="co"># lineair model met covariaat</span></span>
+<span id="cb11-2"><a href="lineaire-regressie.html#cb11-2" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(pHH2O <span class="sc">~</span> pHCa_obs <span class="sc">+</span> bulk_dens, <span class="at">data =</span> data_train)</span>
+<span id="cb11-3"><a href="lineaire-regressie.html#cb11-3" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = pHH2O ~ pHCa_obs + bulk_dens, data = data_train)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.11027 -0.36267  0.00275  0.36178  2.88807 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.466913   0.018764   78.18   &lt;2e-16 ***
+## pHCa_obs    0.790495   0.001896  416.94   &lt;2e-16 ***
+## bulk_dens   0.201238   0.010689   18.83   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5366 on 34870 degrees of freedom
+## Multiple R-squared:  0.8385, Adjusted R-squared:  0.8385 
+## F-statistic: 9.051e+04 on 2 and 34870 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>De coverage blijft hetzelfde en de RMSE is een beetje kleiner geworden:</p>
+<div class="figure">
+<img src="_main_files/figure-html/eval_linreg2-1.png" alt="Evaluatie van de test-dataset met de transferfunctie." width="672" />
+<p class="caption">
+(#fig:eval_linreg2)Evaluatie van de test-dataset met de transferfunctie.
+</p>
+</div>
+</div>
+<div id="correctie-via-icc" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Correctie via ICC<a href="lineaire-regressie.html#correctie-via-icc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Het lineaire regressie-model kan perfect dienen als transferfunctie en geeft unbiased predicties. Indien we naast predicties ook geïnteresseerd zijn in een schatting voor <span class="math inline">\(\beta_X\)</span>, dan zijn de modellen wel gebiased: <span class="math inline">\(\hat{\beta}_W \neq \hat{\beta}_X\)</span>. <span class="citation">Frost &amp; Thompson (<a href="#ref-frost2000">2000</a>)</span> presenteren verschillende methoden om in het geval van simpele lineaire regressie zonder extra covariaten een correctie-factor <span class="math inline">\(\lambda\)</span> te schatten die gebruikt kan worden om te corrigeren voor meetfouten in de predictor: <span class="math inline">\(\hat{\beta}_X = \hat{\lambda} \hat{\beta}_W\)</span>. De methode die uit hun simulaties als meest efficiënt naar voor komt en die makkelijk in gebruik is, is die op basis van de Intra-Class-Correlation (ICC; <span class="math inline">\(\hat{\lambda} = ICC^{-1}\)</span>). De ICC kunnen we schatten obv een substudie met herhaalde metingen: we fitten daarvoor een linear mixed-effects model met random intercepts voor locatie. We gebruiken het <code>lme4</code> package <span class="citation">(<a href="#ref-R-lme4">Bates <em>et al.</em>, 2026</a>)</span>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="lineaire-regressie.html#cb13-1" tabindex="-1"></a><span class="co"># zet de dataset in long-format</span></span>
+<span id="cb13-2"><a href="lineaire-regressie.html#cb13-2" tabindex="-1"></a>data_sub_train_long <span class="ot">&lt;-</span> data_train <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="lineaire-regressie.html#cb13-3" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="lineaire-regressie.html#cb13-4" tabindex="-1"></a>  <span class="fu">filter</span>(substudy <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="lineaire-regressie.html#cb13-5" tabindex="-1"></a>  <span class="fu">select</span>(layer_id, pHCa_obs, pHCa_obs2, pHCa_obs3) <span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href="lineaire-regressie.html#cb13-6" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(pHCa_obs, pHCa_obs2, pHCa_obs3), </span>
+<span id="cb13-7"><a href="lineaire-regressie.html#cb13-7" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;replicate&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;pHCa_obs&quot;</span>)</span>
+<span id="cb13-8"><a href="lineaire-regressie.html#cb13-8" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="lineaire-regressie.html#cb13-9" tabindex="-1"></a><span class="co"># linear mixed effects model</span></span>
+<span id="cb13-10"><a href="lineaire-regressie.html#cb13-10" tabindex="-1"></a><span class="co"># fit met REML want we zijn geïnteresseerd in de variantie-componenten</span></span>
+<span id="cb13-11"><a href="lineaire-regressie.html#cb13-11" tabindex="-1"></a>lmer_replicates <span class="ot">&lt;-</span> <span class="fu">lmer</span>(</span>
+<span id="cb13-12"><a href="lineaire-regressie.html#cb13-12" tabindex="-1"></a>  pHCa_obs <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>layer_id),</span>
+<span id="cb13-13"><a href="lineaire-regressie.html#cb13-13" tabindex="-1"></a>  <span class="at">REML =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb13-14"><a href="lineaire-regressie.html#cb13-14" tabindex="-1"></a>  <span class="at">data =</span> data_sub_train_long</span>
+<span id="cb13-15"><a href="lineaire-regressie.html#cb13-15" tabindex="-1"></a>)</span>
+<span id="cb13-16"><a href="lineaire-regressie.html#cb13-16" tabindex="-1"></a><span class="fu">summary</span>(lmer_replicates)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+## Formula: pHCa_obs ~ 1 + (1 | layer_id)
+##    Data: data_sub_train_long
+## 
+## REML criterion at convergence: 27660.3
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.3013 -0.5596  0.0086  0.5495  2.8531 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  layer_id (Intercept) 2.0193   1.4210  
+##  Residual             0.2965   0.5445  
+## Number of obs: 10461, groups:  layer_id, 3487
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  6.07763    0.02465   246.6</code></pre>
+<p><span class="citation">Frost &amp; Thompson (<a href="#ref-frost2000">2000</a>)</span> presenteren ook de methode om een 95% CI te berekenen voor <span class="math inline">\(\hat{\beta}_X\)</span> die zowel rekening houdt met de onzekerheid op de correctie-factor als met de onzekerheid in het lineair model (obv Fieller’s theorema). We passen dit hieronder toe. De schatting ligt zeer dicht bij de waarde van 0.912 in de volledige dataset en het 95% CI omvat de echte waarde (<a href="notatie.html#notatie">zie hoofdstuk data</a>).</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="lineaire-regressie.html#cb15-1" tabindex="-1"></a><span class="co"># extraheer de ICC uit het model</span></span>
+<span id="cb15-2"><a href="lineaire-regressie.html#cb15-2" tabindex="-1"></a>RE.cov     <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">VarCorr</span>(lmer_replicates))</span>
+<span id="cb15-3"><a href="lineaire-regressie.html#cb15-3" tabindex="-1"></a>ICC        <span class="ot">&lt;-</span> RE.cov<span class="sc">$</span>vcov[<span class="dv">1</span>] <span class="sc">/</span> <span class="fu">sum</span>(RE.cov<span class="sc">$</span>vcov)</span>
+<span id="cb15-4"><a href="lineaire-regressie.html#cb15-4" tabindex="-1"></a>lambda_hat <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>ICC</span>
+<span id="cb15-5"><a href="lineaire-regressie.html#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="lineaire-regressie.html#cb15-6" tabindex="-1"></a><span class="co"># pas de correctie-factor toe op de schatting uit model `m1`</span></span>
+<span id="cb15-7"><a href="lineaire-regressie.html#cb15-7" tabindex="-1"></a>beta_X_hat <span class="ot">&lt;-</span> <span class="fu">coef</span>(m1)[<span class="dv">2</span>] <span class="sc">*</span> lambda_hat</span>
+<span id="cb15-8"><a href="lineaire-regressie.html#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="lineaire-regressie.html#cb15-9" tabindex="-1"></a><span class="co"># Fieller&#39;s methode voor 95% CI:</span></span>
+<span id="cb15-10"><a href="lineaire-regressie.html#cb15-10" tabindex="-1"></a>n                 <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(data_sub_train_long<span class="sc">$</span>layer_id))</span>
+<span id="cb15-11"><a href="lineaire-regressie.html#cb15-11" tabindex="-1"></a>var_lambda_hat    <span class="ot">&lt;-</span> (lambda_hat<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> n</span>
+<span id="cb15-12"><a href="lineaire-regressie.html#cb15-12" tabindex="-1"></a>var_invlambda_hat <span class="ot">&lt;-</span> var_lambda_hat <span class="sc">/</span> lambda_hat<span class="sc">^</span><span class="dv">4</span></span>
+<span id="cb15-13"><a href="lineaire-regressie.html#cb15-13" tabindex="-1"></a>f0 <span class="ot">&lt;-</span> <span class="fu">unname</span>(<span class="fu">coef</span>(m1)[<span class="dv">2</span>])<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="fu">qnorm</span>(.<span class="dv">975</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">vcov</span>(m1)[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb15-14"><a href="lineaire-regressie.html#cb15-14" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">unname</span>(<span class="fu">coef</span>(m1)[<span class="dv">2</span>]) <span class="sc">/</span> lambda_hat <span class="co"># negeer covariantie studie &amp; substudie</span></span>
+<span id="cb15-15"><a href="lineaire-regressie.html#cb15-15" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> lambda_hat<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="fu">qnorm</span>(.<span class="dv">975</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> var_invlambda_hat</span>
+<span id="cb15-16"><a href="lineaire-regressie.html#cb15-16" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="lineaire-regressie.html#cb15-17" tabindex="-1"></a>beta_X_hatCI <span class="ot">&lt;-</span> (f1 <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(f1<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> f0<span class="sc">*</span>f2)) <span class="sc">/</span> f2</span>
+<span id="cb15-18"><a href="lineaire-regressie.html#cb15-18" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="lineaire-regressie.html#cb15-19" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb15-20"><a href="lineaire-regressie.html#cb15-20" tabindex="-1"></a>  <span class="at">estimate =</span> beta_X_hat,</span>
+<span id="cb15-21"><a href="lineaire-regressie.html#cb15-21" tabindex="-1"></a>  <span class="at">ll       =</span> beta_X_hatCI[<span class="dv">1</span>],</span>
+<span id="cb15-22"><a href="lineaire-regressie.html#cb15-22" tabindex="-1"></a>  <span class="at">ul       =</span> beta_X_hatCI[<span class="dv">2</span>]</span>
+<span id="cb15-23"><a href="lineaire-regressie.html#cb15-23" tabindex="-1"></a>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">estimate</th>
+<th align="right">ll</th>
+<th align="right">ul</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.9129189</td>
+<td align="right">0.9036532</td>
+<td align="right">0.9223365</td>
+</tr>
+</tbody>
+</table>
+<p>In dit voorbeeld hebben we gewerkt met een substudie met herhaalde metingen waarbij elke locatie een vast aantal herhaalde metingen had (3), maar voor de schatting van de ICC is dit niet per se nodig; de verschillende locaties kunnen een variabel aantal herhaalde metingen hebben. Het vast aantal herhaalde metingen hebben we gekozen omdat sommige functies uit het <code>mecor</code> package (zie verder) dit vereisen. Ik heb nog niet kunnen achterhalen of deze methode ook kan gebruikt worden (mits aanpassingen) indien we werken met verschillende predictoren.</p>
+
+</div>
+</div>
+<h3>Referenties<a href="referenties.html#referenties" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-R-lme4" class="csl-entry">
+Bates D., Maechler M., Bolker B., Walker S., Jagan M. &amp; Ly A. (2026). lme4: Linear mixed-effects models using eigen and S4. <a href="https://github.com/lme4/lme4/">https://github.com/lme4/lme4/</a>.
+</div>
+<div id="ref-frost2000" class="csl-entry">
+Frost C. &amp; Thompson S.G. (2000). Correcting for Regression Dilution Bias: Comparison of Methods for a Single Predictor Variable. Journal of the Royal Statistical Society Series A: Statistics in Society 163 (2): 173–189. <a href="https://doi.org/10.1111/1467-985X.00164">https://doi.org/10.1111/1467-985X.00164</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="samenvatting-verschillende-methoden.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bland-altman-analyse.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-lineaire-regressie.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
