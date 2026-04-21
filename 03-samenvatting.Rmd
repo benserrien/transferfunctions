@@ -4,19 +4,19 @@ De volgende hoofdstukken passen verschillende methoden toe op de WOSIS dataset. 
 
 -   Ligt de focus op predicties (transferfunctie) of op het schatten van de functionele relatie?
 
-    -   Als predicties de hoofddoelstelling zijn (dit denk ik dat het geval is obv de mail van Hans), dan is regressie-dilutie door meetfouten in de predictor (\$X\$) eigenlijk geen probleem: de predicties van $Y$ op $W$ zijn niet gebiased. In dat geval is (Bayesiaanse) lineaire regressie
+    -   Als predicties de hoofddoelstelling zijn (dit denk ik dat het geval is obv de mail van Hans), dan is regressie-dilutie door meetfouten in de predictor ($X$) eigenlijk geen probleem: de predicties van $Y$ op $W$ zijn niet gebiased. In dat geval is (Bayesiaanse) lineaire regressie de meest voor de hand liggende keuze.
 
-    -   In het geval de functionele relatie het belangrijkste is, dan zal met regressie-dilutie wel rekening gehouden moeten worden. Welke methode hiervoor optimaal is, zal dan afhankelijk zijn van of en welk type substudie er beschikbaar is om voor die dilutie te corrigeren.
+    -   In het geval de functionele relatie het belangrijkste is, dan zal met regressie-dilutie wel rekening gehouden moeten worden. Welke methode hiervoor optimaal is, zal dan afhankelijk zijn van of en welk type sub-studie er beschikbaar is om voor die dilutie te corrigeren.
 
 -   Welke substudie is er beschikbaar om te corrigeren voor regressie-dilutie?
 
-    -   Geen substudie: Zonder substudie lijken de methoden uit het `mcr` package (Deming en Passin-Bablok regressie) of het `smatr` pakage (major axis en standardized major axis) het meest aangewezen.
+    -   Geen substudie: Zonder substudie lijken de methoden uit het `mcr` package (Deming en Passing-Bablok regressie) of het `smatr` pakage (major axis en standardized major axis) het meest aangewezen. In de dataset die we voor dit voorbeeld gebruikten, was de correctie wel meer gebiased dan die van andere methoden; te bekijken via een simulatie-studie of dit een algemeen resultaat is?
 
     -   Substudie met herhaalde metingen: Dit geeft verschillende mogelijkheden: (1) correctie op basis van de ICC zoals in @frost2000 en een Bayesiaanse versie daarvan; (2) `mecor` package; (3) Bayesiaans errors-in-variables model met de `me()` functie uit het `brms` package.
 
-    -   Substudie zonder meetfout op de predictor: dan kunnen we het `mecor` package gebruiken met een regressie-calibratie.
+    -   Substudie zonder meetfout op de predictor: dan kunnen we het `mecor` package gebruiken met een regressie-calibratie. Dit kan ook een externe studie zijn, hoeft niet per se een sub-studie binnen de hoofdstudie te zijn.
 
--   Is het belangrijk om extra covariaten te gebruiken in de transferfunctie? (naast de niet-referentiemethode als belangrijkste predictor) Extra covariaten kunnen handig zijn om de accuraatheid van de predicties te verhogen. Niet alle methoden kunnen extra covariaten in rekening brengen. Daarnaast moeten we ook rekening houden met meetfouten in de extra covariaten.
+-   Is het belangrijk om extra covariaten te gebruiken in de transferfunctie? (naast de niet-referentiemethode als belangrijkste predictor) Extra covariaten kunnen handig zijn om de accuraatheid van de predicties te verhogen. Voor gebruik in transferfuncties moeten de extra covariaten dan wel steeds ter beschikking kunnen zijn in de nieuwe dataset. Niet alle methoden kunnen extra covariaten in rekening brengen. Daarnaast moeten we ook rekening houden met meetfouten in de extra covariaten.
 
     -   De functies uit het `mcr` package kunnen geen extra covariaten in rekening brengen.
 

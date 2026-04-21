@@ -4,7 +4,7 @@ author: "Ben Serrien"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
-bibliography: references.yml
+bibliography: ["references.yml","packages.bib"]
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/research-institute-for-nature-and-forest.csl
 zotero: true
 link-citations: yes
@@ -30,10 +30,3 @@ library(mecor)
 library(brms)
 ```
 
-
-```{r echo=FALSE}
-# # automatically create a bib database for R packages
-# knitr::write_bib(c(
-#   .packages(), 'bookdown', 'knitr', 'rmarkdown'
-# ), 'packages.bib')
-```

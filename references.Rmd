@@ -1,3 +1,11 @@
 `r if (knitr::is_html_output()) '
 # Referenties {-}
 '`
+
+```{r, echo = F}
+knitr::write_bib(
+  c("brms","tidyverse","sf","lme4","mecor","mcr","coat","smatr"),
+  "packages.bib"
+)
+```
+
