@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Hoofdstuk 9 Measurement Error Correction | Transferfuncties voor het SoilHarmony project</title>
+  <meta name="description" content="SoilHarmony transferfunctions" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Hoofdstuk 9 Measurement Error Correction | Transferfuncties voor het SoilHarmony project" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="SoilHarmony transferfunctions" />
+  <meta name="github-repo" content="benserrien/transferfunctions" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Hoofdstuk 9 Measurement Error Correction | Transferfuncties voor het SoilHarmony project" />
+  
+  <meta name="twitter:description" content="SoilHarmony transferfunctions" />
+  
+
+<meta name="author" content="Ben Serrien" />
+
+
+<meta name="date" content="2026-04-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="pca-ma-sma.html"/>
+<link rel="next" href="bayesiaanse-regressie.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Transferfuncties</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welkom</a></li>
+<li class="chapter" data-level="2" data-path="soilharmony-project.html"><a href="soilharmony-project.html"><i class="fa fa-check"></i><b>2</b> SoilHarmony project</a></li>
+<li class="chapter" data-level="3" data-path="notatie.html"><a href="notatie.html"><i class="fa fa-check"></i><b>3</b> Notatie en data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="notatie.html"><a href="notatie.html#notatie-1"><i class="fa fa-check"></i><b>3.1</b> Notatie</a></li>
+<li class="chapter" data-level="3.2" data-path="notatie.html"><a href="notatie.html#data"><i class="fa fa-check"></i><b>3.2</b> Data</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="notatie.html"><a href="notatie.html#training--en-test-data"><i class="fa fa-check"></i><b>3.2.1</b> Training- en test data</a></li>
+<li class="chapter" data-level="3.2.2" data-path="notatie.html"><a href="notatie.html#substudie"><i class="fa fa-check"></i><b>3.2.2</b> Substudie</a></li>
+<li class="chapter" data-level="3.2.3" data-path="notatie.html"><a href="notatie.html#covariaat"><i class="fa fa-check"></i><b>3.2.3</b> Covariaat</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="samenvatting-verschillende-methoden.html"><a href="samenvatting-verschillende-methoden.html"><i class="fa fa-check"></i><b>4</b> Samenvatting verschillende methoden</a></li>
+<li class="chapter" data-level="5" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html"><i class="fa fa-check"></i><b>5</b> Lineaire regressie</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html#zonder-covariaten"><i class="fa fa-check"></i><b>5.1</b> Zonder covariaten</a></li>
+<li class="chapter" data-level="5.2" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html#met-covariaten"><i class="fa fa-check"></i><b>5.2</b> Met covariaten</a></li>
+<li class="chapter" data-level="5.3" data-path="lineaire-regressie.html"><a href="lineaire-regressie.html#correctie-via-icc"><i class="fa fa-check"></i><b>5.3</b> Correctie via ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="bland-altman-analyse.html"><a href="bland-altman-analyse.html"><i class="fa fa-check"></i><b>6</b> Bland-Altman analyse</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="bland-altman-analyse.html"><a href="bland-altman-analyse.html#zonder-covariaten-1"><i class="fa fa-check"></i><b>6.1</b> Zonder covariaten</a></li>
+<li class="chapter" data-level="6.2" data-path="bland-altman-analyse.html"><a href="bland-altman-analyse.html#met-covariaten-1"><i class="fa fa-check"></i><b>6.2</b> Met covariaten</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html"><i class="fa fa-check"></i><b>7</b> Method Comparison Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#deming-regressie-total-least-squares"><i class="fa fa-check"></i><b>7.1</b> Deming regressie (total least-squares)</a></li>
+<li class="chapter" data-level="7.2" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#theil-sen-regressie"><i class="fa fa-check"></i><b>7.2</b> Theil-Sen regressie</a></li>
+<li class="chapter" data-level="7.3" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#passing-bablok-regressie"><i class="fa fa-check"></i><b>7.3</b> Passing-Bablok regressie</a></li>
+<li class="chapter" data-level="7.4" data-path="method-comparison-regression.html"><a href="method-comparison-regression.html#equivariante-passing-bablok-regressie"><i class="fa fa-check"></i><b>7.4</b> Equivariante Passing-Bablok regressie</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="pca-ma-sma.html"><a href="pca-ma-sma.html"><i class="fa fa-check"></i><b>8</b> PCA: MA &amp; SMA</a></li>
+<li class="chapter" data-level="9" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html"><i class="fa fa-check"></i><b>9</b> Measurement Error Correction</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#replicatie-substudie"><i class="fa fa-check"></i><b>9.1</b> Replicatie-substudie</a></li>
+<li class="chapter" data-level="9.2" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#validatie-substudie-intern"><i class="fa fa-check"></i><b>9.2</b> Validatie-substudie (intern)</a></li>
+<li class="chapter" data-level="9.3" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#validatie-substudie-extern"><i class="fa fa-check"></i><b>9.3</b> Validatie-substudie (extern)</a></li>
+<li class="chapter" data-level="9.4" data-path="measurement-error-correction.html"><a href="measurement-error-correction.html#andere-substudies"><i class="fa fa-check"></i><b>9.4</b> Andere substudies</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bayesiaanse-regressie.html"><a href="bayesiaanse-regressie.html"><i class="fa fa-check"></i><b>10</b> Bayesiaanse regressie</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="bayesiaanse-regressie.html"><a href="bayesiaanse-regressie.html#error-in-variables-model"><i class="fa fa-check"></i><b>10.1</b> Error-in-variables model</a></li>
+<li class="chapter" data-level="10.2" data-path="bayesiaanse-regressie.html"><a href="bayesiaanse-regressie.html#latent-variable-model"><i class="fa fa-check"></i><b>10.2</b> Latent-variable model</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="referenties.html"><a href="referenties.html"><i class="fa fa-check"></i>Referenties</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Transferfuncties voor het SoilHarmony project</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="measurement-error-correction" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Hoofdstuk 9</span> Measurement Error Correction<a href="measurement-error-correction.html#measurement-error-correction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Het R package <code>mecor</code> <span class="citation">(<a href="#ref-nab2021">Nab <em>et al.</em>, 2021</a>; <a href="#ref-R-mecor">Nab, 2021</a>)</span> bevat de mogelijkheid om de data uit een substudie te gebruiken om te corrigeren voor measurement error in de predictor (of in de outcome, maar dat is voor het SoilHarmony project nvt). De functies uit dit package geven zowel de niet-gecorrigeerde (proxy relatie) als de gecorrigeerde regressie (functionele relatie). De niet-gecorrigeerde regressie kan gebruikt worden voor predicties te maken (transferfunctie) en de gecorrigeerde regressie schat de functionele relatie (beide interessant).</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="measurement-error-correction.html#cb44-1" tabindex="-1"></a><span class="co"># ter vergelijking met de mecor-methoden printen we nog eens de relatie </span></span>
+<span id="cb44-2"><a href="measurement-error-correction.html#cb44-2" tabindex="-1"></a><span class="co"># Y vs. X:</span></span>
+<span id="cb44-3"><a href="measurement-error-correction.html#cb44-3" tabindex="-1"></a>(<span class="fu">lm</span>(pHH2O <span class="sc">~</span> pHCa, <span class="at">data =</span> data_wosis_pH))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = pHH2O ~ pHCa, data = data_wosis_pH)
+## 
+## Coefficients:
+## (Intercept)         pHCa  
+##      1.0425       0.9118</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="measurement-error-correction.html#cb46-1" tabindex="-1"></a><span class="co"># Y vs. W:</span></span>
+<span id="cb46-2"><a href="measurement-error-correction.html#cb46-2" tabindex="-1"></a>(<span class="fu">lm</span>(pHH2O <span class="sc">~</span> pHCa_obs, <span class="at">data =</span> data_wosis_pH))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = pHH2O ~ pHCa_obs, data = data_wosis_pH)
+## 
+## Coefficients:
+## (Intercept)     pHCa_obs  
+##      1.7455       0.7957</code></pre>
+<div id="replicatie-substudie" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Replicatie-substudie<a href="measurement-error-correction.html#replicatie-substudie" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>De substudie met herhaalde metingen van de predictor kan als volgt gebruikt worden in de <code>mecor</code> functie. We gebruiken maximum-likelihood estimation voor het model te fitten (bij de standaard methode zijn de resultaten afhankelijk van de volgorde waarin de replicaten staan). De schatting van de gecorrigeerde regressie-coëfficiënt ligt zeer dicht bij de waarde uit de volledige dataset (zie hierboven) en het 95% CI omvat de waarde. Deze methode lijkt dus beter dan de functies uit het <code>mcr</code> en <code>smatr</code> package, alvast voor deze dataset.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="measurement-error-correction.html#cb48-1" tabindex="-1"></a>mecor_m1 <span class="ot">&lt;-</span> <span class="fu">mecor</span>(</span>
+<span id="cb48-2"><a href="measurement-error-correction.html#cb48-2" tabindex="-1"></a>  pHH2O <span class="sc">~</span> <span class="fu">MeasError</span>(pHCa_obs, <span class="at">replicate =</span> <span class="fu">cbind</span>(pHCa_obs2, pHCa_obs3)),</span>
+<span id="cb48-3"><a href="measurement-error-correction.html#cb48-3" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;mle&quot;</span>, </span>
+<span id="cb48-4"><a href="measurement-error-correction.html#cb48-4" tabindex="-1"></a>  <span class="at">data =</span> data_train</span>
+<span id="cb48-5"><a href="measurement-error-correction.html#cb48-5" tabindex="-1"></a>)</span>
+<span id="cb48-6"><a href="measurement-error-correction.html#cb48-6" tabindex="-1"></a><span class="fu">summary</span>(mecor_m1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## mecor(formula = pHH2O ~ MeasError(pHCa_obs, replicate = cbind(pHCa_obs2, 
+##     pHCa_obs3)), data = data_train, method = &quot;mle&quot;)
+## 
+## Coefficients Corrected Model:
+##              Estimate       SE
+## (Intercept)  1.055635 0.044965
+## cor_pHCa_obs 0.909343 0.007405
+## 
+## 95% Confidence Intervals:
+##              Estimate      LCI      UCI
+## (Intercept)  1.055635 0.967504 1.143766
+## cor_pHCa_obs 0.909343 0.894829 0.923856
+## 
+## The measurement error is corrected for by application of maximum likelihood estimation 
+## 
+## Coefficients Uncorrected Model:
+##              Estimate Std. Error t value  Pr(&gt;|t|)
+## (Intercept) 1.7430264  0.0117642  148.16 &lt; 2.2e-16
+## pHCa_obs    0.7960465  0.0018823  422.90 &lt; 2.2e-16
+## 
+## 95% Confidence Intervals:
+##             Estimate      LCI      UCI
+## (Intercept) 1.743026 1.719968 1.766085
+## pHCa_obs    0.796047 0.792357 0.799736
+## 
+## Residual standard error: 0.5393357 on 34871 degrees of freedom</code></pre>
+<p>Het niet-gecoorigeerde regressie-model kan gebruikt worden voor predicties te maken. Hieronder staan de predicties met coverage en RMSE.</p>
+<div class="figure"><span style="display:block;" id="fig:eval-mecor1"></span>
+<img src="_main_files/figure-html/eval-mecor1-1.png" alt="Evaluatie van de test-dataset met de transferfunctie." width="672" />
+<p class="caption">
+Figure 9.1: Evaluatie van de test-dataset met de transferfunctie.
+</p>
+</div>
+<p>Extra covariaten kunnen gebruikt worden in het <code>mecor</code> package (er wordt veronderstelt dat deze zonder meetfout zijn gemeten). De RMSE wordt hierdoor kleiner.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="measurement-error-correction.html#cb50-1" tabindex="-1"></a>mecor_m2 <span class="ot">&lt;-</span> <span class="fu">mecor</span>(</span>
+<span id="cb50-2"><a href="measurement-error-correction.html#cb50-2" tabindex="-1"></a>  pHH2O <span class="sc">~</span> <span class="fu">MeasError</span>(pHCa_obs, <span class="at">replicate =</span> <span class="fu">cbind</span>(pHCa_obs2, pHCa_obs3)) <span class="sc">+</span></span>
+<span id="cb50-3"><a href="measurement-error-correction.html#cb50-3" tabindex="-1"></a>    bulk_dens,</span>
+<span id="cb50-4"><a href="measurement-error-correction.html#cb50-4" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;mle&quot;</span>, </span>
+<span id="cb50-5"><a href="measurement-error-correction.html#cb50-5" tabindex="-1"></a>  <span class="at">data =</span> data_train</span>
+<span id="cb50-6"><a href="measurement-error-correction.html#cb50-6" tabindex="-1"></a>)</span>
+<span id="cb50-7"><a href="measurement-error-correction.html#cb50-7" tabindex="-1"></a><span class="fu">summary</span>(mecor_m2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## mecor(formula = pHH2O ~ MeasError(pHCa_obs, replicate = cbind(pHCa_obs2, 
+##     pHCa_obs3)) + bulk_dens, data = data_train, method = &quot;mle&quot;)
+## 
+## Coefficients Corrected Model:
+##              Estimate       SE
+## (Intercept)  0.923218 0.039330
+## cor_pHCa_obs 0.906203 0.007580
+## bulk_dens    0.098382 0.012499
+## 
+## 95% Confidence Intervals:
+##              Estimate      LCI      UCI
+## (Intercept)  0.923218 0.846132 1.000304
+## cor_pHCa_obs 0.906203 0.891347 0.921060
+## bulk_dens    0.098382 0.073885 0.122879
+## 
+## The measurement error is corrected for by application of maximum likelihood estimation 
+## 
+## Coefficients Uncorrected Model:
+##              Estimate Std. Error t value  Pr(&gt;|t|)
+## (Intercept) 1.4669134  0.0187639  78.177 &lt; 2.2e-16
+## pHCa_obs    0.7904951  0.0018959 416.941 &lt; 2.2e-16
+## bulk_dens   0.2012385  0.0106886  18.827 &lt; 2.2e-16
+## 
+## 95% Confidence Intervals:
+##             Estimate      LCI      UCI
+## (Intercept) 1.466913 1.430135 1.503691
+## pHCa_obs    0.790495 0.786779 0.794211
+## bulk_dens   0.201238 0.180288 0.222188
+## 
+## Residual standard error: 0.5366228 on 34870 degrees of freedom</code></pre>
+<div class="figure"><span style="display:block;" id="fig:eval-mecor2"></span>
+<img src="_main_files/figure-html/eval-mecor2-1.png" alt="Evaluatie van de test-dataset met de transferfunctie." width="672" />
+<p class="caption">
+Figure 9.2: Evaluatie van de test-dataset met de transferfunctie.
+</p>
+</div>
+</div>
+<div id="validatie-substudie-intern" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Validatie-substudie (intern)<a href="measurement-error-correction.html#validatie-substudie-intern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>De substudie waarbij de predictor zonder meetfout wordt gemeten kan als volgt gebruikt worden in de <code>mecor</code> functie. Ook hier kunnen extra covariaten gebruikt worden. We gebruiken efficiënt estimation om het model te fitten. De schatting van de gecorrigeerde regressie-coëfficiënt ligt zeer dicht bij de waarde uit de volledige dataset (zie hierboven) en het 95% CI omvat de waarde. Deze methode lijkt dus beter dan de functies uit het <code>mcr</code> en <code>smatr</code> package, alvast voor deze dataset. De predicties van dit model hebben dezelfde coverage en RMSE als het vorige want de predicties gebeuren obv het niet-gerorrigeerde model.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="measurement-error-correction.html#cb52-1" tabindex="-1"></a>mecor_m3 <span class="ot">&lt;-</span> <span class="fu">mecor</span>(</span>
+<span id="cb52-2"><a href="measurement-error-correction.html#cb52-2" tabindex="-1"></a>  pHH2O <span class="sc">~</span> <span class="fu">MeasError</span>(pHCa_obs, <span class="at">reference =</span> pHCa_sub) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="measurement-error-correction.html#cb52-3" tabindex="-1"></a>    bulk_dens,</span>
+<span id="cb52-4"><a href="measurement-error-correction.html#cb52-4" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;efficient&quot;</span>, </span>
+<span id="cb52-5"><a href="measurement-error-correction.html#cb52-5" tabindex="-1"></a>  <span class="at">data =</span> data_train</span>
+<span id="cb52-6"><a href="measurement-error-correction.html#cb52-6" tabindex="-1"></a>)</span>
+<span id="cb52-7"><a href="measurement-error-correction.html#cb52-7" tabindex="-1"></a><span class="fu">summary</span>(mecor_m3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## mecor(formula = pHH2O ~ MeasError(pHCa_obs, reference = pHCa_sub) + 
+##     bulk_dens, data = data_train, method = &quot;efficient&quot;)
+## 
+## Coefficients Corrected Model:
+##             Estimate       SE
+## (Intercept) 0.913947 0.026590
+## pHCa_sub    0.910684 0.002915
+## bulk_dens   0.089958 0.014766
+## 
+## 95% Confidence Intervals:
+##             Estimate      LCI      UCI
+## (Intercept) 0.913947 0.861832 0.966063
+## pHCa_sub    0.910684 0.904971 0.916397
+## bulk_dens   0.089958 0.061018 0.118898
+## 
+## The measurement error is corrected for by application of efficient regression calibration 
+## 
+## Coefficients Uncorrected Model:
+##              Estimate Std. Error t value  Pr(&gt;|t|)
+## (Intercept) 1.4669134  0.0187639  78.177 &lt; 2.2e-16
+## pHCa_obs    0.7904951  0.0018959 416.941 &lt; 2.2e-16
+## bulk_dens   0.2012385  0.0106886  18.827 &lt; 2.2e-16
+## 
+## 95% Confidence Intervals:
+##             Estimate      LCI      UCI
+## (Intercept) 1.466913 1.430135 1.503691
+## pHCa_obs    0.790495 0.786779 0.794211
+## bulk_dens   0.201238 0.180288 0.222188
+## 
+## Residual standard error: 0.5366228 on 34870 degrees of freedom</code></pre>
+<div class="figure"><span style="display:block;" id="fig:eval-mecor3"></span>
+<img src="_main_files/figure-html/eval-mecor3-1.png" alt="Evaluatie van de test-dataset met de transferfunctie." width="672" />
+<p class="caption">
+Figure 9.3: Evaluatie van de test-dataset met de transferfunctie.
+</p>
+</div>
+</div>
+<div id="validatie-substudie-extern" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Validatie-substudie (extern)<a href="measurement-error-correction.html#validatie-substudie-extern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>De validatie-substudie hierboven was intern, in de zin dat de locaties uit de substudie ook gemeten zijn in de hoofdstudie. Indien dit niet het geval is en de locaties uit een andere studie komen (maar wel tot dezelfde populatie behoren natuurlijk), kan die info ook gebruikt worden in het <code>mecor</code> package. We fitten daarom eerst een lineair model in de externe validatie-dataset en gebruiken dit model om het model in de hoofdstudie te calibreren. Uit de resultaten hieronder blijkt dat de correctie niet zo goed is als met de andere methoden hierboven (de gecorrigeerde <span class="math inline">\(\beta\)</span> is verder van de nominale waarde dan voorheen), maar de predicties zijn natuurlijk nog steeds bruikbaar want die gebeuren obv het niet-gecorrigeerde model.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="measurement-error-correction.html#cb54-1" tabindex="-1"></a><span class="co"># gebruik de validatie-substudie als was het een externe studie</span></span>
+<span id="cb54-2"><a href="measurement-error-correction.html#cb54-2" tabindex="-1"></a>ext_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
+<span id="cb54-3"><a href="measurement-error-correction.html#cb54-3" tabindex="-1"></a>  pHH2O <span class="sc">~</span> pHCa_sub <span class="sc">+</span> bulk_dens,</span>
+<span id="cb54-4"><a href="measurement-error-correction.html#cb54-4" tabindex="-1"></a>  <span class="at">data =</span> data_train <span class="sc">%&gt;%</span> <span class="fu">filter</span>(substudy <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb54-5"><a href="measurement-error-correction.html#cb54-5" tabindex="-1"></a>)</span>
+<span id="cb54-6"><a href="measurement-error-correction.html#cb54-6" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="measurement-error-correction.html#cb54-7" tabindex="-1"></a>mecor_m4 <span class="ot">&lt;-</span> <span class="fu">mecor</span>(</span>
+<span id="cb54-8"><a href="measurement-error-correction.html#cb54-8" tabindex="-1"></a>  pHH2O <span class="sc">~</span> <span class="fu">MeasErrorExt</span>(pHCa_obs, <span class="at">model =</span> ext_lm) <span class="sc">+</span> bulk_dens,</span>
+<span id="cb54-9"><a href="measurement-error-correction.html#cb54-9" tabindex="-1"></a>  <span class="at">data =</span> data_train</span>
+<span id="cb54-10"><a href="measurement-error-correction.html#cb54-10" tabindex="-1"></a>)</span>
+<span id="cb54-11"><a href="measurement-error-correction.html#cb54-11" tabindex="-1"></a><span class="fu">summary</span>(mecor_m4)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## mecor(formula = pHH2O ~ MeasErrorExt(pHCa_obs, model = ext_lm) + 
+##     bulk_dens, data = data_train)
+## 
+## Coefficients Corrected Model:
+##              Estimate       SE
+## (Intercept)  0.672841 0.034111
+## cor_pHCa_obs 0.867696 0.003754
+## bulk_dens    0.124875 0.018173
+## 
+## 95% Confidence Intervals:
+##              Estimate      LCI      UCI
+## (Intercept)  0.672841 0.605985 0.739696
+## cor_pHCa_obs 0.867696 0.860339 0.875053
+## bulk_dens    0.124875 0.089257 0.160493
+## 
+## The measurement error is corrected for by application of regression calibration 
+## 
+## Coefficients Uncorrected Model:
+##              Estimate Std. Error t value  Pr(&gt;|t|)
+## (Intercept) 1.4669134  0.0187639  78.177 &lt; 2.2e-16
+## pHCa_obs    0.7904951  0.0018959 416.941 &lt; 2.2e-16
+## bulk_dens   0.2012385  0.0106886  18.827 &lt; 2.2e-16
+## 
+## 95% Confidence Intervals:
+##             Estimate      LCI      UCI
+## (Intercept) 1.466913 1.430135 1.503691
+## pHCa_obs    0.790495 0.786779 0.794211
+## bulk_dens   0.201238 0.180288 0.222188
+## 
+## Residual standard error: 0.5366228 on 34870 degrees of freedom</code></pre>
+<div class="figure"><span style="display:block;" id="fig:eval-mecor4"></span>
+<img src="_main_files/figure-html/eval-mecor4-1.png" alt="Evaluatie van de test-dataset met de transferfunctie." width="672" />
+<p class="caption">
+Figure 9.4: Evaluatie van de test-dataset met de transferfunctie.
+</p>
+</div>
+</div>
+<div id="andere-substudies" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Andere substudies<a href="measurement-error-correction.html#andere-substudies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Het <code>mecor</code> package kan ook gebruik maken van calibratie-substudies. Die heb ik nog niet geprobeerd in deze dataset. Te bekijken of dat van toepassing is voor SoilHarmony of niet.</p>
+
+</div>
+</div>
+<h3>Referenties<a href="referenties.html#referenties" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-R-mecor" class="csl-entry">
+Nab L. (2021). Mecor: Measurement error correction in linear models with a continuous outcome. <a href="https://github.com/LindaNab/mecor">https://github.com/LindaNab/mecor</a>.
+</div>
+<div id="ref-nab2021" class="csl-entry">
+Nab L., Van Smeden M., Keogh R.H. &amp; Groenwold R.H.H. (2021). Mecor: An R package for measurement error correction in linear regression models with a continuous outcome. Computer Methods and Programs in Biomedicine 208: 106238. <a href="https://doi.org/10.1016/j.cmpb.2021.106238">https://doi.org/10.1016/j.cmpb.2021.106238</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="pca-ma-sma.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bayesiaanse-regressie.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/08-mecor.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
